@@ -1,20 +1,18 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{sty/equations}
+\ProvidesPackage{sty/equations}[Beatify a multiple equations with comments and alignment.]
 
-\RequirePackage{amsmath} % principal package in the AMS-LATEX distribution
-\RequirePackage{amssymb} % more unusual mathematical symbols
-\RequirePackage{IEEEtrantools} 
-\RequirePackage{array}
-\usepackage{etoolbox} % Create commands in existing environments
+\RequirePackage{amsmath}        % provide basic math components
+\RequirePackage{amssymb}        % provide QED square symbol
+\RequirePackage{IEEEtrantools}  % provide {IEEEeqnarray} to align equations and their comments
+\RequirePackage{array}          % provide {array} to draw a vertical line next to the comments
+\usepackage{etoolbox}           % add methods to an environment
 
-%%%%%%%%%% Expand IEEEeqnarray Environment %%%%%%%%%% 
-
-\makeatletter
-\patchcmd{\@IEEEeqnarray}{\relax}{\relax\intertext@}{}{}
-\makeatother
+\makeatletter % give access to private commands (name contains an @)
 
 
-
+% Define environment \begin{equations}
+% - beatify multiple centered equations with comments, alignment and numbers
+% - allows only aligning one equation sign
 \newenvironment{equations}
 {
     \begin{IEEEeqnarray*}{+rCll+x*}
@@ -23,27 +21,52 @@
     \end{IEEEeqnarray*}
 }
 
-\newcommand{\inaccessiblecomment}{}
-\newcommand{\inaccessibleexplanation}{}
-\newcommand{\inaccessibleqed}{}
 
+% Define method \intertext{text}
+% - write a regular paragraph across the entire columnwidth between two equations
+% - call it after the \\ of the last equation without any further commands
+% - don't put a \\ in front of the next equation
+% - only accessible inside the equations environment (aka method)
+% @param #1 Regular text to display (no math mode)
+\patchcmd{\@IEEEeqnarray}{\relax}{\relax\intertext@}{}{}
+
+
+% Declare private methods.
+\newcommand{\@comment}{}
+\newcommand{\@explanation}{}
+\newcommand{\@qed}{}
+
+
+% Define public methods.
 \AtBeginEnvironment{equations}
 {    
-    % Define comment (only accessible inside the environment)
-    \renewcommand{\inaccessiblecomment}[1]
+    % Define method \comment{text}
+    % - write a regular paragraph into a separate comment column
+    % - seperate the comment with a vertical line and some horizontal space
+    % - comments have a fixed width
+    % - call it as the last command in a row and after two &
+    % - only accessible inside the equations environment (aka method)
+    % @param  #1    Regular text to display (no math mode)
+    \renewcommand{\@comment}[1]
     {
-        & % Write comment into new column
+        & % Write comment into new column.
         \quad
-        \begin{array}{|p{.33\columnwidth}} % draw vertical comment seperator and exit math mode
+        \begin{array}{|p{.33\columnwidth}} % Draw a vertical line as a seperator and exit math mode.
             #1
         \end{array}
     }
-    \global\let\comment\inaccessiblecomment
+    \global\let\comment\@comment % Make the method public inside the environment.
     
-    % Define qed (only accessible inside the environment)
-    \renewcommand{\inaccessibleqed}
+    % Define method \qed
+    % - draw a square (meaning quod erum demonstrandum) at the end of the row
+    % - call it after the \\ of the last equation
+    % - don't call other command in the same row
+    % - only accessible inside the equations environment (aka method)
+    \renewcommand{\@qed}
     {
         &&&& $\Box$
     }
-    \global\let\qed\inaccessibleqed
+    \global\let\qed\@qed % Make the method public inside the environment.
 }
+
+\makeatother % revoke access to private commands (name contains an @)
