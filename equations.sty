@@ -1,0 +1,49 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{sty/equations}
+
+\RequirePackage{amsmath} % principal package in the AMS-LATEX distribution
+\RequirePackage{amssymb} % more unusual mathematical symbols
+\RequirePackage{IEEEtrantools} 
+\RequirePackage{array}
+\usepackage{etoolbox} % Create commands in existing environments
+
+%%%%%%%%%% Expand IEEEeqnarray Environment %%%%%%%%%% 
+
+\makeatletter
+\patchcmd{\@IEEEeqnarray}{\relax}{\relax\intertext@}{}{}
+\makeatother
+
+
+
+\newenvironment{equations}
+{
+    \begin{IEEEeqnarray*}{+rCll+x*}
+}
+{
+    \end{IEEEeqnarray*}
+}
+
+\newcommand{\inaccessiblecomment}{}
+\newcommand{\inaccessibleexplanation}{}
+\newcommand{\inaccessibleqed}{}
+
+\AtBeginEnvironment{equations}
+{    
+    % Define comment (only accessible inside the environment)
+    \renewcommand{\inaccessiblecomment}[1]
+    {
+        & % Write comment into new column
+        \quad
+        \begin{array}{|p{.33\columnwidth}} % draw vertical comment seperator and exit math mode
+            #1
+        \end{array}
+    }
+    \global\let\comment\inaccessiblecomment
+    
+    % Define qed (only accessible inside the environment)
+    \renewcommand{\inaccessibleqed}
+    {
+        &&&& $\Box$
+    }
+    \global\let\qed\inaccessibleqed
+}
