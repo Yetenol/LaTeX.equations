@@ -7,7 +7,7 @@
 \RequirePackage{array}          % provide {array} to draw a vertical line next to the comments
 \RequirePackage{etoolbox}       % add methods to an environment
 
-\makeatletter % grant access to private commands (name contains an @)
+\makeatletter % Grant access to private commands (Name contains an @).
 
 
 % Define environment \begin{equations}
@@ -26,7 +26,7 @@
 % - write a regular paragraph across the entire columnwidth between two equations
 % - call it after the \\ of the last equation without any further commands
 % - don't put a \\ in front of the next equation
-% - only accessible inside the equations environment (aka method)
+% - only accessible inside the environment (aka method)
 % @param #1 Regular text to display (no math mode)
 \patchcmd{\@IEEEeqnarray}{\relax}{\relax\intertext@}{}{}
 
@@ -45,7 +45,7 @@
     % - seperate the comment with a vertical line and some horizontal space
     % - comments have a fixed width
     % - call it as the last command in a row and after two &
-    % - only accessible inside the equations environment (aka method)
+    % - only accessible inside the environment (aka method)
     % @param  #1    Regular text to display (no math mode)
     \renewcommand{\@comment}[1]
     {
@@ -62,7 +62,7 @@
     % - draw a square (meaning quod erum demonstrandum) at the end of the row
     % - call it after the \\ of the last equation
     % - don't call other command in the same row
-    % - only accessible inside the equations environment (aka method)
+    % - only accessible inside the environment (aka method)
     \renewcommand{\@qed}
     {
         &&&& $\Box$
@@ -71,4 +71,4 @@
 }
 
 
-\makeatother % revoke access to private commands (name contains an @)
+\makeatother % Revoke access to private commands (Name contains an @).
