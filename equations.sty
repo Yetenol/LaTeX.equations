@@ -57,6 +57,7 @@
     }
     \global\let\comment\@comment % Make the method public inside the environment.
     
+
     % Define method \qed
     % - draw a square (meaning quod erum demonstrandum) at the end of the row
     % - call it after the \\ of the last equation
@@ -68,5 +69,6 @@
     }
     \global\let\qed\@qed % Make the method public inside the environment.
 }
+
 
 \makeatother % revoke access to private commands (name contains an @)
