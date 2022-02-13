@@ -14,9 +14,9 @@
 % Define environment \begin{equations}
 % - beatify multiple centered equations with comments, alignment and numbers
 % - allows only aligning one equation sign
-\newenvironment{equations}
+\newenvironment{equations}[1][rCl]
 {
-    \begin{IEEEeqnarray*}{+rCll+x*}
+    \begin{IEEEeqnarray*}{+#1l+x*}
 }
 {
     \end{IEEEeqnarray*}
