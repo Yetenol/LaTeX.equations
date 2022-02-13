@@ -89,14 +89,8 @@
     
     
     % Modify method \label{name}
-    % - automatically show citation number labeled equations
-    \let\oldlabel\label
-    \renewcommand{\label}[1]
-    {
-        \yesnumber
-        \oldlabel{#1}
-    }
-    \global\let\qed\@qed % Make the method public inside the environment.
+    % - automatically show citation number for labeled equations
+    \apptocmd{\label}{\yesnumber}{}{}
     
     
     % Define method \eqnref{name}
