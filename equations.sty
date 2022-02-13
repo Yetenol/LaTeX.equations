@@ -52,6 +52,7 @@
 \newcommand{\@comment}{}
 \newcommand{\@explanation}{}
 \newcommand{\@qed}{}
+\newcommand{\@eqnref}{}
 
 
 % Define public methods.
@@ -85,6 +86,27 @@
         &&&& $\Box$
     }
     \global\let\qed\@qed % Make the method public inside the environment.
+    
+    
+    % Modify method \label{name}
+    % - automatically show citation number labeled equations
+    \let\oldlabel\label
+    \renewcommand{\label}[1]
+    {
+        \yesnumber
+        \oldlabel{#1}
+    }
+    \global\let\qed\@qed % Make the method public inside the environment.
+    
+    
+    % Define method \eqnref{name}
+    % - reference another equation
+    % - only accessible inside the environment (aka method)
+    \renewcommand{\@eqnref}[1]
+    {%
+        (\ref{#1})%
+    }
+    \global\let\eqnref\@eqnref % Make the method public inside the environment.
 
 
     % Alias method \yessubnumber
