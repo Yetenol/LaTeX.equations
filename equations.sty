@@ -89,8 +89,16 @@
     
     
     % Modify method \label{name}
-    % - automatically show citation number for labeled equations
-    \apptocmd{\label}{\yesnumber}{}{}
+    % - attach a node for cross-referencing e.g. \eqnref{eqn:EXAMPLE}
+    % - automatically show citation number e.g. (3)
+    % @param #1 new node for cross-referencing e.g. \label{eqn:EXAMPLE}
+    \apptocmd{\label}{\yesnumber}{}{} % add citation
+    
+    % Define method \sublabel{name}
+    % - attach a node for cross-referencing
+    % - automatically show citation number with letter e.g. (3a)
+    \global\let\sublabel\label % Alias method \sublabel
+    \pretocmd{\sublabel}{\yessubnumber}{}{} % add citation
     
     
     % Define method \eqnref{name}
@@ -104,7 +112,7 @@
 
 
     % Alias method \yessubnumber
-    \global\let\yessubnumber\IEEEyessubnumber % Make the method public inside the environment.
+    \global\let\yessubnumber\IEEEyessubnumber
 }
 
 
