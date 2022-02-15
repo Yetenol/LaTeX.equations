@@ -18,7 +18,7 @@
 % @param #1 columns and their types used to display all equations
 \newenvironment{equations}[1][\@columnsalignoneequalsign]
 {
-    \begin{IEEEeqnarray*}{#1l}
+    \begin{IEEEeqnarray*}{#1l} % l for comment column
 }
 {
     \end{IEEEeqnarray*}
@@ -32,7 +32,7 @@
 % @param #1 columns and their types used to display all equations
 \newenvironment{equations*}[1][\@columnsalignoneequalsign]
 {
-    \begin{IEEEeqnarray}{#1l}
+    \begin{IEEEeqnarray}{#1l} % l for comment column
 }
 {
     \end{IEEEeqnarray}
