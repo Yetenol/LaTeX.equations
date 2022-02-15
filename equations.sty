@@ -6,10 +6,13 @@
 \RequirePackage{IEEEtrantools}  % provide {IEEEeqnarray} to align equations and their comments
 \RequirePackage{array}          % provide {array} to draw a vertical line next to the comments
 \RequirePackage{etoolbox}       % add methods to an environment
+\RequirePackage{xifthen}        % detect empty arguments
 
 
 \makeatletter % Grant access to private commands (Name contains an @).
 
+
+%%%%%%%%%%%%%%%%%%%% PUBLIC FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
 
 % Define environment \begin{equations} or \begin{equations}[columns]
 % - beatify multiple centered equations with comments, alignment and numbers
@@ -39,6 +42,22 @@
 }
 
 
+% Setter for \@commentcolumnwidth
+\newcommand{\setcommentcolumnwidth}[1]
+{
+    \ifthenelse{\isempty{#1}} % parameter omitted?
+    {
+        \renewcommand{\@commentcolumnwidth}{0.33\columnwidth} % default value
+    }
+    {
+        \renewcommand{\@commentcolumnwidth}{#1} % override value
+    }
+}
+
+
+%%%%%%%%%%%%%%%%%%%% PUBLIC METHODS: %%%%%%%%%%%%%%%%%%%%
+% - only accessible inside the environment equations
+
 % Define method \intertext{text}
 % - write a regular paragraph across the entire columnwidth between two equations
 % - call it after the \\ of the last equation without any further commands
@@ -48,14 +67,6 @@
 \patchcmd{\@IEEEeqnarray}{\relax}{\relax\intertext@}{}{}
 
 
-% Declare private methods.
-\newcommand{\@comment}{}
-\newcommand{\@explanation}{}
-\newcommand{\@qed}{}
-\newcommand{\@eqnref}{}
-
-
-% Define public methods.
 \AtBeginEnvironment{equations}
 {    
     % Define method \comment{text}
@@ -63,13 +74,12 @@
     % - seperate the comment with a vertical line and some horizontal space
     % - comments have a fixed width
     % - call it as the last command in a row and after two &
-    % - only accessible inside the environment (aka method)
     % @param  #1    Regular text to display (no math mode)
     \renewcommand{\@comment}[1]
     {
         & % Write comment into new column.
         \quad
-        \begin{array}{|p{.33\columnwidth}} % Draw a vertical line as a seperator and exit math mode.
+        \begin{array}{|p{\@commentcolumnwidth}} % Draw a vertical line as a seperator and exit math mode.
             #1
         \end{array}
     }
@@ -80,7 +90,6 @@
     % - draw a square (meaning quod erum demonstrandum) at the end of the row
     % - call it after the \\ of the last equation
     % - don't call other command in the same row
-    % - only accessible inside the environment (aka method)
     \renewcommand{\@qed}
     {
         \intertext{\raggedleft $\Box$}
@@ -103,7 +112,6 @@
     
     % Define method \eqnref{name}
     % - reference another equation
-    % - only accessible inside the environment (aka method)
     \renewcommand{\@eqnref}[1]
     {%
         (\ref{#1})%
@@ -116,10 +124,19 @@
 }
 
 
-% Define internal function \@columnsalignoneequalsign
-% - create default columns to allign one equals sign
-% - @return string of column types
+%%%%%%%%%%%%%%%%%%%% DECLARE INTERFACE FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\@comment}{}
+\newcommand{\@explanation}{}
+\newcommand{\@qed}{}
+\newcommand{\@eqnref}{}
+
+
+%%%%%%%%%%%%%%%%%%%% DECLARE PRIVATE VARIABLES: %%%%%%%%%%%%%%%%%%%%
+
 \newcommand{\@columnsalignoneequalsign}{rCl}
+\newcommand{\@commentcolumnwidth}{}
+\setcommentcolumnwidth{} % apply default value
 
 
 \makeatother % Revoke access to private commands (Name contains an @).
