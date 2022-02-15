@@ -14,6 +14,7 @@
 % Define environment \begin{equations} or \begin{equations}[columns]
 % - beatify multiple centered equations with comments, alignment and numbers
 % - disable citation numbers by default
+% - allows only aligning one equation sign
 % @param #1 columns and their types used to display all equations
 \newenvironment{equations}[1][rCl]
 {
@@ -27,6 +28,7 @@
 % Define environment \begin{equations*} or \begin{equations*}[columns]
 % - beatify multiple centered equations with comments, alignment and numbers
 % - enable citation numbers by default
+% - allows only aligning one equation sign
 % @param #1 columns and their types used to display all equations
 \newenvironment{equations*}[1][rCl]
 {
@@ -81,7 +83,7 @@
     % - only accessible inside the environment (aka method)
     \renewcommand{\@qed}
     {
-        &&&& $\Box$
+        \intertext{\raggedleft $\Box$}
     }
     \global\let\qed\@qed % Make the method public inside the environment.
     
