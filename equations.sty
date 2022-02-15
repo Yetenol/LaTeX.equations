@@ -16,9 +16,9 @@
 % - disable citation numbers by default
 % - allows only aligning one equation sign
 % @param #1 columns and their types used to display all equations
-\newenvironment{equations}[1][rCl]
+\newenvironment{equations}[1][\@columnsalignoneequalsign]
 {
-    \begin{IEEEeqnarray*}{+#1l+x*}
+    \begin{IEEEeqnarray*}{#1l}
 }
 {
     \end{IEEEeqnarray*}
@@ -30,9 +30,9 @@
 % - enable citation numbers by default
 % - allows only aligning one equation sign
 % @param #1 columns and their types used to display all equations
-\newenvironment{equations*}[1][rCl]
+\newenvironment{equations*}[1][\@columnsalignoneequalsign]
 {
-    \begin{IEEEeqnarray}{+#1l+x*}
+    \begin{IEEEeqnarray}{#1l}
 }
 {
     \end{IEEEeqnarray}
@@ -114,6 +114,12 @@
     % Alias method \yessubnumber
     \global\let\yessubnumber\IEEEyessubnumber
 }
+
+
+% Define internal function \@columnsalignoneequalsign
+% - create default columns to allign one equals sign
+% - @return string of column types
+\newcommand{\@columnsalignoneequalsign}{rCl}
 
 
 \makeatother % Revoke access to private commands (Name contains an @).
