@@ -42,15 +42,15 @@
 }
 
 
-% Setter for \@commentcolumnwidth
-\newcommand{\setcommentcolumnwidth}[1]
+% Setter for \@commentwidth
+\newcommand{\setcommentwidth}[1]
 {
     \ifthenelse{\isempty{#1}} % parameter omitted?
     {
-        \renewcommand{\@commentcolumnwidth}{0.33\columnwidth} % default value
+        \renewcommand{\@commentwidth}{0.33\columnwidth} % default value
     }
     {
-        \renewcommand{\@commentcolumnwidth}{#1} % override value
+        \renewcommand{\@commentwidth}{#1} % override value
     }
 }
 
@@ -79,7 +79,7 @@
     {
         & % Write comment into new column.
         \quad
-        \begin{array}{|p{\@commentcolumnwidth}} % Draw a vertical line as a seperator and exit math mode.
+        \begin{array}{|p{\@commentwidth}} % Draw a vertical line as a seperator and exit math mode.
             #1
         \end{array}
     }
@@ -135,8 +135,8 @@
 %%%%%%%%%%%%%%%%%%%% DECLARE PRIVATE VARIABLES: %%%%%%%%%%%%%%%%%%%%
 
 \newcommand{\@columnsalignoneequalsign}{rCl}
-\newcommand{\@commentcolumnwidth}{}
-\setcommentcolumnwidth{} % apply default value
+\newcommand{\@commentwidth}{}
+\setcommentwidth{} % apply default value
 
 
 \makeatother % Revoke access to private commands (Name contains an @).
