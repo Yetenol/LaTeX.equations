@@ -86,6 +86,22 @@
     \global\let\comment\@comment % Make the method public inside the environment.
 %
 %
+    % Define method \unit{text}
+    % - write a the unit into the comment column
+    % - don't show vertical comment seperator line
+    % - call it as the last command in a row and after two &
+    % @param  #1    Units display non-italics (yes math mode)
+    \renewcommand{\@unit}[1]
+    {
+        & % Write unit into new column.
+        \quad
+        \left[
+            \mathrm{#1}
+        \right]
+    }
+    \global\let\unit\@unit % Make the method public inside the environment.
+%
+%
     % Define method \qed
     % - draw a square (meaning quod erum demonstrandum) at the end of the row
     % - call it after the \\ of the last equation
@@ -127,6 +143,7 @@
 %%%%%%%%%%%%%%%%%%%% DECLARE INTERFACE FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
 
 \newcommand{\@comment}{}
+\newcommand{\@unit}{}
 \newcommand{\@explanation}{}
 \newcommand{\@qed}{}
 \newcommand{\@eqnref}{}
