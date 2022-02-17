@@ -84,8 +84,8 @@
         \end{array}
     }
     \global\let\comment\@comment % Make the method public inside the environment.
-    
-
+%
+%
     % Define method \qed
     % - draw a square (meaning quod erum demonstrandum) at the end of the row
     % - call it after the \\ of the last equation
@@ -95,21 +95,21 @@
         \intertext{\raggedleft $\Box$}
     }
     \global\let\qed\@qed % Make the method public inside the environment.
-    
-    
+%
+%
     % Modify method \label{name}
     % - attach a node for cross-referencing e.g. \eqnref{eqn:EXAMPLE}
     % - automatically show citation number e.g. (3)
     % @param #1 new node for cross-referencing e.g. \label{eqn:EXAMPLE}
     \apptocmd{\label}{\yesnumber}{}{} % add citation
-    
+    %
     % Define method \sublabel{name}
     % - attach a node for cross-referencing
     % - automatically show citation number with letter e.g. (3a)
     \global\let\sublabel\label % Alias method \sublabel
     \pretocmd{\sublabel}{\yessubnumber}{}{} % add citation
-    
-    
+%
+%
     % Define method \eqnref{name}
     % - reference another equation
     \renewcommand{\@eqnref}[1]
@@ -117,8 +117,8 @@
         (\ref{#1})%
     }
     \global\let\eqnref\@eqnref % Make the method public inside the environment.
-
-
+%
+%
     % Alias method \yessubnumber
     \global\let\yessubnumber\IEEEyessubnumber
 }
