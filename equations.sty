@@ -88,7 +88,13 @@
     \renewcommand{\@setcomment}[1]
     {
         \@resetcomment
-        \gnewcommand{\@commentstr}{#1}
+        \gnewcommand{\@description}
+        {%
+            &\quad%
+            \begin{array}{|p{\@commentwidth}}%
+                #1%
+            \end{array}%
+        }
     }
     \global\let\comment\@setcomment % Make the method public inside the environment.
 %
@@ -101,7 +107,13 @@
     \renewcommand{\@setunit}[1]
     {
         \@resetunit
-        \gnewcommand{\@unitstr}{#1}
+        \gnewcommand{\@description}
+        {%
+            &\quad%
+            \left[%
+                \mathrm{#1}%
+            \right]%
+        }
     }
     \global\let\unit\@setunit % Make the method public inside the environment.
 %
@@ -144,13 +156,9 @@
 %
     \pretocmd{\@IEEEeqnarraycr}
     {%
-        \@ifundefined{@commentstr}{}
+        \@ifundefined{@description}{}
         {
-            &\quad
-            \begin{array}{|p{\@commentwidth}}%
-                \ifthenelse{\isempty{\@commentstr}}{}{\@commentstr}%
-                \ifthenelse{\isempty{\@unitstr}}{}{\@unitstr}%
-            \end{array}%
+            \@description
             \@resetcomment
         }
     }
@@ -160,16 +168,15 @@
 %%%%%%%%%%%%%%%%%%%% DECLARE INTERFACE FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
 
 \newcommand{\@setcomment}{}
-\newcommand{\@resetcomment}{\global\let\@commentstr\relax} % \@commentstr
+\newcommand{\@resetcomment}{\global\let\@description\relax} % \@description
 \newcommand{\@setunit}{}
-\newcommand{\@resetunit}{\global\let\@unitstr\relax} % undefine \@unitstr
+\newcommand{\@resetunit}{\global\let\@description\relax} % undefine \@description
 \newcommand{\@qed}{}
 \newcommand{\@eqnref}{}
 
 %%%%%%%%%%%%%%%%%%%% DECLARE PRIVATE VARIABLES: %%%%%%%%%%%%%%%%%%%%
 
-\newcommand{\@commentstr}{}
-\newcommand{\@unitstr}{}
+\newcommand{\@description}{}
 \newcommand{\@columnsalignoneequalsign}{rCl}
 \newcommand{\@commentwidth}{}
 \setcommentwidth{} % apply default value
