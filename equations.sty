@@ -16,8 +16,8 @@
 
 % Define environment \begin{equations} or \begin{equations}[columns]
 % - beatify multiple centered equations with comments, alignment and numbers
-% - disable citation numbers by default
 % - allows only aligning one equation sign
+% @param * enable citation numbers by default
 % @param #1 columns and their types used to display all equations
 \newenvironment{equations}[1][\@columnsalignoneequalsign]
 {
@@ -26,13 +26,6 @@
 {
     \end{IEEEeqnarray*}
 }
-
-
-% Define environment \begin{equations*} or \begin{equations*}[columns]
-% - beatify multiple centered equations with comments, alignment and numbers
-% - enable citation numbers by default
-% - allows only aligning one equation sign
-% @param #1 columns and their types used to display all equations
 \newenvironment{equations*}[1][\@columnsalignoneequalsign]
 {
     \begin{IEEEeqnarray}{#1l} % l for comment column
