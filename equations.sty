@@ -59,6 +59,8 @@
 % @param #1 Regular text to display (no math mode)
 \patchcmd{\@IEEEeqnarray}{\relax}{\relax\intertext@}{}{}
 
+\newcommand{\@commentstr}{Kommentar}
+% \newcommand{\@commentstr}{Einheit}
 
 \AtBeginEnvironment{equations}
 {    
@@ -68,15 +70,11 @@
     % - comments have a fixed width
     % - call it as the last command in a row and after two &
     % @param  #1    Regular text to display (no math mode)
-    \renewcommand{\@comment}[1]
+    \renewcommand{\@setcomment}[1]
     {
-        & % Write comment into new column.
-        \quad
-        \begin{array}{|p{\@commentwidth}} % Draw a vertical line as a seperator and exit math mode.
-            #1
-        \end{array}
+        % \newcommand{\@commentstr}{#1}
     }
-    \global\let\comment\@comment % Make the method public inside the environment.
+    \global\let\comment\@setcomment % Make the method public inside the environment.
 %
 %
     % Define method \unit{text}
@@ -84,15 +82,11 @@
     % - don't show vertical comment seperator line
     % - call it as the last command in a row and after two &
     % @param  #1    Units display non-italics (yes math mode)
-    \renewcommand{\@unit}[1]
+    \renewcommand{\@setunit}[1]
     {
-        & % Write unit into new column.
-        \quad
-        \left[
-            \mathrm{#1}
-        \right]
+        % \newcommand{\@unitstr}{#1}
     }
-    \global\let\unit\@unit % Make the method public inside the environment.
+    \global\let\unit\@setunit % Make the method public inside the environment.
 %
 %
     % Define method \qed
@@ -130,14 +124,22 @@
 %
     % Alias method \yessubnumber
     \global\let\yessubnumber\IEEEyessubnumber
+%
+    \pretocmd{\@IEEEeqnarraycr}
+    {%
+        &\quad
+        \begin{array}{|p{\@commentwidth}}%
+            \@ifundefined{@commentstr}{}{\@commentstr}%
+            \@ifundefined{@unitstr}{}{\@unitstr}%
+        \end{array}%
+    }
 }
 
 
 %%%%%%%%%%%%%%%%%%%% DECLARE INTERFACE FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
 
-\newcommand{\@comment}{}
-\newcommand{\@unit}{}
-\newcommand{\@explanation}{}
+\newcommand{\@setcomment}{}
+\newcommand{\@setunit}{}
 \newcommand{\@qed}{}
 \newcommand{\@eqnref}{}
 
