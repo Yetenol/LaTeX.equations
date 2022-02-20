@@ -37,14 +37,14 @@
 % @param #1 columns and their types used to display all equations
 \newenvironment{equations}[1][\@columnsalignoneequalsign]
 {
-    \begin{IEEEeqnarray*}{#1l} % l for comment column
+    \begin{IEEEeqnarray*}{#1l} % l for description column
 }
 {
     \end{IEEEeqnarray*}
 }
 \newenvironment{equations*}[1][\@columnsalignoneequalsign]
 {
-    \begin{IEEEeqnarray}{#1l} % l for comment column
+    \begin{IEEEeqnarray}{#1l} % l for description column
 }
 {
     \end{IEEEeqnarray}
@@ -77,10 +77,11 @@
 
 \AtBeginEnvironment{equations}
 {
+    % Fix empty desciption in first line
     \@resetcomment
 %
     % Define method \comment{text}
-    % - write a regular paragraph into a separate comment column
+    % - write a regular paragraph into the description column
     % - seperate the comment with a vertical line and some horizontal space
     % - comments have a fixed width
     % - call it as the last command in a row and after two &
@@ -100,10 +101,9 @@
 %
 %
     % Define method \unit{text}
-    % - write a the unit into the comment column
-    % - don't show vertical comment seperator line
-    % - call it as the last command in a row and after two &
-    % @param  #1    Units display non-italics (yes math mode)
+    % - write a unit into the description column
+    % - seperate the unit with horizontal space
+    % @param  #1    Units to display non-italics (yes math mode)
     \renewcommand{\@setunit}[1]
     {
         \@resetunit
@@ -154,25 +154,35 @@
     % Alias method \yessubnumber
     \global\let\yessubnumber\IEEEyessubnumber
 %
-    \pretocmd{\@IEEEeqnarraycr}
-    {%
-        \@ifundefined{@description}{}
-        {
-            \@description
-            \@resetcomment
-        }
-    }
+%
+    % Paste the description column
+    \pretocmd{\@IEEEeqnarraycr}{\@pasteDescription}
 }
+
+% Fix no description because of missing \\ in last equation
+\AtEndEnvironment{equations}{\@pasteDescription}
 
 
 %%%%%%%%%%%%%%%%%%%% DECLARE INTERFACE FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
 
 \newcommand{\@setcomment}{}
-\newcommand{\@resetcomment}{\global\let\@description\relax} % \@description
 \newcommand{\@setunit}{}
-\newcommand{\@resetunit}{\global\let\@description\relax} % undefine \@description
 \newcommand{\@qed}{}
 \newcommand{\@eqnref}{}
+
+
+%%%%%%%%%%%%%%%%%%%% DECLARE PRIVATE FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\@resetcomment}{\global\let\@description\relax} % \@description
+\newcommand{\@resetunit}{\global\let\@description\relax} % undefine \@description
+\newcommand{\@pasteDescription}
+{%
+    \@ifundefined{@description}{}%
+    {%
+        \@description% Insert description
+        \@resetcomment% Reset description for next line
+    }
+}
 
 %%%%%%%%%%%%%%%%%%%% DECLARE PRIVATE VARIABLES: %%%%%%%%%%%%%%%%%%%%
 
