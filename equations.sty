@@ -87,9 +87,9 @@
     % @param  #1    Regular text to display (no math mode)
     \renewcommand{\@setcomment}[1]
     {
-        \grenewcommand{\@commentstr}{#1}
-        \grenewcommand{\@hasCommentOrUnit}{true}
-        }
+        \@resetcomment
+        \gnewcommand{\@commentstr}{#1}
+    }
     \global\let\comment\@setcomment % Make the method public inside the environment.
 %
 %
@@ -100,7 +100,8 @@
     % @param  #1    Units display non-italics (yes math mode)
     \renewcommand{\@setunit}[1]
     {
-        % \newcommand{\@unitstr}{#1}
+        \@resetunit
+        \gnewcommand{\@unitstr}{#1}
     }
     \global\let\unit\@setunit % Make the method public inside the environment.
 %
@@ -158,10 +159,10 @@
 
 %%%%%%%%%%%%%%%%%%%% DECLARE INTERFACE FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
 
-\newcommand{\@hasCommentOrUnit}{}
 \newcommand{\@setcomment}{}
-\newcommand{\@resetcomment}{\global\let\@commentstr\relax}
+\newcommand{\@resetcomment}{\global\let\@commentstr\relax} % \@commentstr
 \newcommand{\@setunit}{}
+\newcommand{\@resetunit}{\global\let\@unitstr\relax} % undefine \@unitstr
 \newcommand{\@qed}{}
 \newcommand{\@eqnref}{}
 
