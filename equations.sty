@@ -88,8 +88,8 @@
     \renewcommand{\@setcomment}[1]
     {
         \grenewcommand{\@commentstr}{#1}
-    }
-    \renewcommand{\@resetcomment}{\@setcomment{}}
+        \grenewcommand{\@hasCommentOrUnit}{true}
+        }
     \global\let\comment\@setcomment % Make the method public inside the environment.
 %
 %
@@ -143,28 +143,32 @@
 %
     \pretocmd{\@IEEEeqnarraycr}
     {%
-        &\quad
-        \begin{array}{|p{\@commentwidth}}%
-            \ifthenelse{\isempty{\@commentstr}}{}{\@commentstr}%
-            \@ifundefined{@unitstr}{}{\@unitstr}%
-        \end{array}%
-        \@resetcomment
+        \@ifundefined{@commentstr}{}
+        {
+            &\quad
+            \begin{array}{|p{\@commentwidth}}%
+                \ifthenelse{\isempty{\@commentstr}}{}{\@commentstr}%
+                \ifthenelse{\isempty{\@unitstr}}{}{\@unitstr}%
+            \end{array}%
+            \@resetcomment
+        }
     }
 }
 
 
 %%%%%%%%%%%%%%%%%%%% DECLARE INTERFACE FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
 
+\newcommand{\@hasCommentOrUnit}{}
 \newcommand{\@setcomment}{}
-\newcommand{\@resetcomment}{}
+\newcommand{\@resetcomment}{\global\let\@commentstr\relax}
 \newcommand{\@setunit}{}
 \newcommand{\@qed}{}
 \newcommand{\@eqnref}{}
 
-
 %%%%%%%%%%%%%%%%%%%% DECLARE PRIVATE VARIABLES: %%%%%%%%%%%%%%%%%%%%
 
 \newcommand{\@commentstr}{}
+\newcommand{\@unitstr}{}
 \newcommand{\@columnsalignoneequalsign}{rCl}
 \newcommand{\@commentwidth}{}
 \setcommentwidth{} % apply default value
