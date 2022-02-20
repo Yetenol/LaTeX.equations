@@ -12,6 +12,22 @@
 \makeatletter % Grant access to private commands (Name contains an @).
 
 
+%%%%%%%%%%%%%%%%%%%% PACKAGE: DEFINE GLOBAL COMMAND %%%%%%%%%%%%%%%%%%%%
+
+\def\gnewcommand{\g@star@or@long\gnew@command}
+\def\grenewcommand{\g@star@or@long\grenew@command}
+\def\g@star@or@long#1{% 
+  \@ifstar{\let\l@ngrel@x\global#1}{\def\l@ngrel@x{\long\global}#1}}
+\def\gnew@command#1{\@testopt{\@gnewcommand#1}0}
+\def\@gnewcommand#1[#2]{%
+  \kernel@ifnextchar [{\@gxargdef#1[#2]}%
+                {\@argdef#1[#2]}}  
+\let\@gxargdef\@xargdef
+\patchcmd{\@gxargdef}{\def}{\gdef}{}{}
+\let\grenew@command\renew@command
+\patchcmd{\grenew@command}{\new@command}{\gnew@command}{}{}
+
+
 %%%%%%%%%%%%%%%%%%%% PUBLIC FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
 
 % Define environment \begin{equations} or \begin{equations}[columns]
@@ -59,11 +75,10 @@
 % @param #1 Regular text to display (no math mode)
 \patchcmd{\@IEEEeqnarray}{\relax}{\relax\intertext@}{}{}
 
-\newcommand{\@commentstr}{Kommentar}
-% \newcommand{\@commentstr}{Einheit}
-
 \AtBeginEnvironment{equations}
-{    
+{
+    \@resetcomment
+%
     % Define method \comment{text}
     % - write a regular paragraph into a separate comment column
     % - seperate the comment with a vertical line and some horizontal space
@@ -72,8 +87,9 @@
     % @param  #1    Regular text to display (no math mode)
     \renewcommand{\@setcomment}[1]
     {
-        % \newcommand{\@commentstr}{#1}
+        \grenewcommand{\@commentstr}{#1}
     }
+    \renewcommand{\@resetcomment}{\@setcomment{}}
     \global\let\comment\@setcomment % Make the method public inside the environment.
 %
 %
@@ -129,9 +145,10 @@
     {%
         &\quad
         \begin{array}{|p{\@commentwidth}}%
-            \@ifundefined{@commentstr}{}{\@commentstr}%
+            \ifthenelse{\isempty{\@commentstr}}{}{\@commentstr}%
             \@ifundefined{@unitstr}{}{\@unitstr}%
         \end{array}%
+        \@resetcomment
     }
 }
 
@@ -139,6 +156,7 @@
 %%%%%%%%%%%%%%%%%%%% DECLARE INTERFACE FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
 
 \newcommand{\@setcomment}{}
+\newcommand{\@resetcomment}{}
 \newcommand{\@setunit}{}
 \newcommand{\@qed}{}
 \newcommand{\@eqnref}{}
@@ -146,6 +164,7 @@
 
 %%%%%%%%%%%%%%%%%%%% DECLARE PRIVATE VARIABLES: %%%%%%%%%%%%%%%%%%%%
 
+\newcommand{\@commentstr}{}
 \newcommand{\@columnsalignoneequalsign}{rCl}
 \newcommand{\@commentwidth}{}
 \setcommentwidth{} % apply default value
