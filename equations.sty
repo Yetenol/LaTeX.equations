@@ -100,11 +100,11 @@
     \global\let\comment\@setcomment % Make the method public inside the environment.
 %
 %
-    % Define method \unit{text}
+    % Define method \commentunit{text}
     % - write a unit into the description column
     % - seperate the unit with horizontal space
     % @param  #1    Units to display non-italics (yes math mode)
-    \renewcommand{\@setunit}[1]
+    \renewcommand{\@setcommentunit}[1]
     {
         \@resetunit
         \gnewcommand{\@description}
@@ -115,7 +115,7 @@
             \right]%
         }
     }
-    \global\let\unit\@setunit % Make the method public inside the environment.
+    \global\let\commentunit\@setcommentunit % Make the method public inside the environment.
 %
 %
     % Define method \qed
@@ -166,7 +166,7 @@
 %%%%%%%%%%%%%%%%%%%% DECLARE INTERFACE FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
 
 \newcommand{\@setcomment}{}
-\newcommand{\@setunit}{}
+\newcommand{\@setcommentunit}{}
 \newcommand{\@qed}{}
 \newcommand{\@eqnref}{}
 
