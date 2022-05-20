@@ -5,6 +5,7 @@
 \RequirePackage{amssymb}        % provide QED square symbol
 \RequirePackage{IEEEtrantools}  % provide {IEEEeqnarray} to align equations and their comments
 \RequirePackage{array}          % provide {array} to draw a vertical line next to the comments
+\RequirePackage{siunitx}        % provide \unit to display commentunits
 \RequirePackage{etoolbox}       % add methods to an environment
 \RequirePackage{xifthen}        % detect empty arguments
 
@@ -111,7 +112,7 @@
         {%
             &\quad%
             \left[%
-                \mathrm{#1}%
+                \unit{#1}%
             \right]%
         }
     }
