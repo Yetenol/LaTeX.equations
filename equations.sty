@@ -41,7 +41,7 @@
     \NewDocumentCommand{#1}{s}{% define \⟨macro name⟩
       \IfBooleanTF{##1}% is starred variant called?
         {\ensuremath{#2}}%
-        {\@throwunlessmath{#2}}%
+        {\@throwunlessmath{#2}{#1}}%
     }%
 }%
 
@@ -52,7 +52,7 @@
     \RenewDocumentCommand{#1}{s}{% define \⟨macro name⟩
       \IfBooleanTF{##1}% is starred variant called?
         {\ensuremath{#2}}%
-        {\@throwunlessmath{#2}}%
+        {\@throwunlessmath{#2}{#1}}%
     }%
 }%
 
@@ -63,7 +63,7 @@
     \ProvideDocumentCommand{#1}{s}{% define \⟨macro name⟩
       \IfBooleanTF{##1}% is starred variant called?
         {\ensuremath{#2}}%
-        {\@throwunlessmath{#2}}%
+        {\@throwunlessmath{#2}{#1}}%
     }%
 }%
 
@@ -74,7 +74,7 @@
     \DeclareDocumentCommand{#1}{s}{% define \⟨macro name⟩
       \IfBooleanTF{##1}% is starred variant called?
         {\ensuremath{#2}}%
-        {\@throwunlessmath{#2}}%
+        {\@throwunlessmath{#2}{#1}}%
     }%
 }%
 
@@ -234,12 +234,15 @@
     }
 }
 
-% Define \@throwunlessmath {⟨math expression⟩}
+% Define \@throwunlessmath {⟨math expression⟩} {⟨macro name⟩}
 % - print math expression if in math mode
+% @param #1 ⟨math expression⟩: expression to be printed
+% @param #2 ⟨macro name⟩: macro name for error message
 % @throws ERROR if in text mode
-\newcommand\@throwunlessmath[1]{%
-    \relax\ifmmode#1\else{\PackageError{equations}{Use star variant outside math mode like ⧵symbol*}{}}\fi%
+\newcommand\@throwunlessmath[2]{%
+    \relax\ifmmode#1\else{\PackageError{equations}{Use star variant #2* outside math mode}{}}\fi%
 }
+
 
 %%%%%%%%%%%%%%%%%%%% DECLARE PRIVATE VARIABLES: %%%%%%%%%%%%%%%%%%%%
 
