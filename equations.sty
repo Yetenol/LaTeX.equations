@@ -240,7 +240,11 @@
 % @param #2 ⟨macro name⟩: macro name for error message
 % @throws ERROR if in text mode
 \newcommand\@throwunlessmath[2]{%
-    \relax\ifmmode#1\else{\PackageError{equations}{Use star variant #2* outside math mode}{}}\fi%
+    \relax\ifmmode%
+        {#1}%
+    \else%
+        {\PackageError{equations}{Use star variant #2* (without the space) outside math mode}{}}%
+    \fi%
 }
 
 
