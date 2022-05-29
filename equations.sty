@@ -38,8 +38,8 @@
 % - @param #2 ⟨math expression⟩: mathematical term that is printed
 % - @throws ERROR if ⟨macro name⟩ has already been defined
 \newcommand\newmathsymbol[2]{%
-    \NewDocumentCommand#1{s}{%
-      \IfBooleanTF##1% is starred variant called?
+    \NewDocumentCommand{#1}{s}{% define \⟨macro name⟩
+      \IfBooleanTF{##1}% is starred variant called?
         {\ensuremath{#2}}%
         {\@throwunlessmath{#2}}%
     }%
@@ -49,8 +49,8 @@
 % - Analogous to \newmathsymbol
 % - @throws ERROR if ⟨macro name⟩ has not previously been defined
 \newcommand\renewmathsymbol[2]{
-    \RenewDocumentCommand#1{s}{%
-      \IfBooleanTF##1% is starred variant called?
+    \RenewDocumentCommand{#1}{s}{% define \⟨macro name⟩
+      \IfBooleanTF{##1}% is starred variant called?
         {\ensuremath{#2}}%
         {\@throwunlessmath{#2}}%
     }%
@@ -60,8 +60,8 @@
 % - Analogous to \newmathsymbol
 % - creates a new definition for ⟨macro name⟩ only if one has not already been given
 \newcommand\providemathsymbol[2]{
-    \ProvideDocumentCommand#1{s}{%
-      \IfBooleanTF##1% is starred variant called?
+    \ProvideDocumentCommand{#1}{s}{% define \⟨macro name⟩
+      \IfBooleanTF{##1}% is starred variant called?
         {\ensuremath{#2}}%
         {\@throwunlessmath{#2}}%
     }%
@@ -71,8 +71,8 @@
 % - will always create the new definition, irrespective of any existing ⟨macro name⟩ with the same name
 % - this should be used sparingly.
 \newcommand\declaremathsymbol[2]{
-    \DeclareDocumentCommand#1{s}{%
-      \IfBooleanTF##1% is starred variant called?
+    \DeclareDocumentCommand{#1}{s}{% define \⟨macro name⟩
+      \IfBooleanTF{##1}% is starred variant called?
         {\ensuremath{#2}}%
         {\@throwunlessmath{#2}}%
     }%
@@ -246,7 +246,7 @@
 \newcommand{\@description}{}
 \newcommand{\@columnsalignoneequalsign}{rCl}
 \newcommand{\@commentwidth}{}
-\setcommentwidth{} % apply default value
+\setcommentwidth{} % initialize default value
 
 
 \makeatother % Revoke access to private commands (Name contains an @).
