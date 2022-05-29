@@ -31,6 +31,54 @@
 
 %%%%%%%%%%%%%%%%%%%% PUBLIC FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
 
+% Define \newmathsymbol \⟨macro name⟩ {⟨math expression⟩}
+% - assigns the desired math expression of a symbol or variable 
+%   to a macro which can thereafter be used like any other macro
+% - @param #1 ⟨macro name⟩: name of the mathematical symbol or variable
+% - @param #2 ⟨math expression⟩: mathematical term that is printed
+% - @throws ERROR if ⟨macro name⟩ has already been defined
+\newcommand\newmathsymbol[2]{%
+    \NewDocumentCommand#1{s}{%
+      \IfBooleanTF##1% is starred variant called?
+        {\ensuremath{#2}}%
+        {\@throwunlessmath{#2}}%
+    }%
+}%
+
+% Define \renewmathsymbol \⟨macro name⟩ {⟨math expression⟩}
+% - Analogous to \newmathsymbol
+% - @throws ERROR if ⟨macro name⟩ has not previously been defined
+\newcommand\renewmathsymbol[2]{
+    \RenewDocumentCommand#1{s}{%
+      \IfBooleanTF##1% is starred variant called?
+        {\ensuremath{#2}}%
+        {\@throwunlessmath{#2}}%
+    }%
+}%
+
+% Define \providemathsymbol \⟨macro name⟩ {⟨math expression⟩}
+% - Analogous to \newmathsymbol
+% - creates a new definition for ⟨macro name⟩ only if one has not already been given
+\newcommand\providemathsymbol[2]{
+    \ProvideDocumentCommand#1{s}{%
+      \IfBooleanTF##1% is starred variant called?
+        {\ensuremath{#2}}%
+        {\@throwunlessmath{#2}}%
+    }%
+}%
+
+% Define \renewmathsymbol \⟨macro name⟩ {⟨math expression⟩}
+% - will always create the new definition, irrespective of any existing ⟨macro name⟩ with the same name
+% - this should be used sparingly.
+\newcommand\declaremathsymbol[2]{
+    \DeclareDocumentCommand#1{s}{%
+      \IfBooleanTF##1% is starred variant called?
+        {\ensuremath{#2}}%
+        {\@throwunlessmath{#2}}%
+    }%
+}%
+
+
 % Define environment \begin{equations} or \begin{equations}[columns]
 % - beatify multiple centered equations with comments, alignment and numbers
 % - allows only aligning one equation sign
@@ -51,8 +99,9 @@
     \end{IEEEeqnarray}
 }
 
-
-% Setter for \@commentwidth
+% Define setter \setcommentwidth {⟨comment width⟩}
+% - setter for \@commentwidth
+% - @param #1 ⟨comment width⟩: width of the column that displays the equation comments
 \newcommand{\setcommentwidth}[1]
 {
     \ifthenelse{\isempty{#1}} % parameter omitted?
@@ -183,6 +232,13 @@
         \@description% Insert description
         \@resetcomment% Reset description for next line
     }
+}
+
+% Define \@throwunlessmath {⟨math expression⟩}
+% - print math expression if in math mode
+% @throws ERROR if in text mode
+\newcommand\@throwunlessmath[1]{%
+    \relax\ifmmode#1\else{\PackageError{equations}{Use star variant outside math mode like ⧵symbol*}{}}\fi%
 }
 
 %%%%%%%%%%%%%%%%%%%% DECLARE PRIVATE VARIABLES: %%%%%%%%%%%%%%%%%%%%
