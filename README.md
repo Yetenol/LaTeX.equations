@@ -23,8 +23,7 @@ Table of Contents
   - [label](#label)
   - [sublabel](#sublabel)
 - [Private functions](#private-functions)
-  - [resetcomment](#resetcomment)
-  - [resetunit](#resetunit)
+  - [cleardescription](#cleardescription)
   - [renderdescription](#renderdescription)
   - [throwunlessmath](#throwunlessmath)
 - [Private attributes](#private-attributes)
@@ -216,18 +215,14 @@ Implementation
 # Private functions
 Private functions are only accessible inside packages. Their name contains an `@` character. 
 
-## resetcomment
-> `\@resetcomment`
-- clear the `description` variable to undefined
-
-## resetunit
-> `\@resetunit`
+## cleardescription
+> `\@cleardescription`
 - clear the `description` variable to undefined
 
 ## renderdescription
 > `\@pasteDescription}`
-- if previously defined render the current description column
-- the description column can contain a comment or a commentunit
+- render a description paragraph in the comment column
+- only runs if a comment or commentunit has been set for the current line
 
 ## throwunlessmath
 > `\@throwunlessmath{⟨math expression⟩}{⟨macro name⟩}`
@@ -243,9 +238,9 @@ Attributes are variables which are only accessible inside packages.
 > `\@description`
 - stores the current line's comment or commentunit
 
-## columnsalignoneequalsign
-> `\@columnsalignoneequalsign`
-- stores the default column setup `rCl`:  
+## defaultcolumnssetup
+> `\@defaultcolumnssetup`
+- stores the default columns setup `rCl`:  
     a right-aligned expression,  
     an equals sign and  
     a left-aligned expression

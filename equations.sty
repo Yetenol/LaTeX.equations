@@ -62,14 +62,14 @@
 }%
 
 
-\newenvironment{equations}[1][\@columnsalignoneequalsign]
+\newenvironment{equations}[1][\@defaultcolumnssetup]
 {
     \begin{IEEEeqnarray*}{#1l} % l for description column
 }
 {
     \end{IEEEeqnarray*}
 }
-\newenvironment{equations*}[1][\@columnsalignoneequalsign]
+\newenvironment{equations*}[1][\@defaultcolumnssetup]
 {
     \begin{IEEEeqnarray}{#1l} % l for description column
 }
@@ -95,7 +95,7 @@
 
 \AtBeginEnvironment{equations}
 {
-    \@resetcomment  % Fix empty desciption in first line
+    \@cleardescription  % Fix empty desciption in first line
     % Grant access to environment methods
     \let\comment\@setcomment
     \let\commentunit\@setcommentunit
@@ -117,7 +117,7 @@
 
 \newcommand{\@setcomment}[1]
 {
-    \@resetcomment
+    \@cleardescription
     \gnewcommand{\@description}
     {%
         &\quad%
@@ -129,7 +129,7 @@
 
 \newcommand{\@setcommentunit}[1]
 {
-    \@resetunit
+    \@cleardescription
     \gnewcommand{\@description}
     {%
         &\quad%
@@ -158,14 +158,13 @@
 
 %%%%%%%%%%%%%%%%%%%% DECLARE PRIVATE FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
 
-\newcommand{\@resetcomment}{\global\let\@description\relax} % \@description
-\newcommand{\@resetunit}{\global\let\@description\relax} % undefine \@description
+\newcommand{\@cleardescription}{\global\let\@description\relax} % \@description
 \newcommand{\@renderdescription}
 {%
     \@ifundefined{@description}{}%
     {%
         \@description% Insert description
-        \@resetcomment% Reset description for next line
+        \@cleardescription% Reset description for next line
     }
 }
 
@@ -180,7 +179,7 @@
 %%%%%%%%%%%%%%%%%%%% DECLARE PRIVATE VARIABLES %%%%%%%%%%%%%%%%%%%%
 
 \newcommand{\@description}{}
-\newcommand{\@columnsalignoneequalsign}{rCl}
+\newcommand{\@defaultcolumnssetup}{rCl}
 \newcommand{\@commentwidth}{}
 \setcommentwidth{} % initialize default value
 
