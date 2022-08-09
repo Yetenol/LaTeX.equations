@@ -25,7 +25,7 @@ Table of Contents
 - [Private functions](#private-functions)
   - [resetcomment](#resetcomment)
   - [resetunit](#resetunit)
-  - [pasteDescription](#pastedescription)
+  - [renderdescription](#renderdescription)
   - [throwunlessmath](#throwunlessmath)
 - [Private attributes](#private-attributes)
   - [description](#description)
@@ -224,7 +224,7 @@ Private functions are only accessible inside packages. Their name contains an `@
 > `\@resetunit`
 - clear the `description` variable to undefined
 
-## pasteDescription
+## renderdescription
 > `\@pasteDescription}`
 - if previously defined render the current description column
 - the description column can contain a comment or a commentunit

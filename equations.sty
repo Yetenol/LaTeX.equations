@@ -12,8 +12,6 @@
 
 \makeatletter % Grant access to private commands (Name contains an @).
 
-% \newcommand{\@label}[1]{\label{#1}}
-
 %%%%%%%%%%%%%%%%%%%% PACKAGE: DEFINE GLOBAL COMMAND %%%%%%%%%%%%%%%%%%%%
 
 \def\gnewcommand{\g@star@or@long\gnew@command}
@@ -98,22 +96,22 @@
 \AtBeginEnvironment{equations}
 {
     \@resetcomment  % Fix empty desciption in first line
+    % Grant access to environment methods
+    \let\comment\@setcomment
+    \let\commentunit\@setcommentunit
+    \let\qed\@qed
 %
-    \let\comment\@setcomment % Make the method public inside the environment.
-    \let\commentunit\@setcommentunit % Make the method public inside the environment.
-    \let\qed\@qed % Make the method public inside the environment.
     \let\@builtinlabel\label
-%
-    \let\label\@yesnumber % add citation
+    \let\label\@yesnumber
     \let\sublabel\@yessubnumber
 %
-    \global\let\yessubnumber\IEEEyessubnumber    % Alias method \yessubnumber
+    \let\yessubnumber\IEEEyessubnumber    % Alias method \yessubnumber
 %
-    \pretocmd{\@IEEEeqnarraycr}{\@pasteDescription}   % Paste the description column
+    \pretocmd{\@IEEEeqnarraycr}{\@renderdescription}   % Paste the description column
 }
 
 % Fix no description because of missing \\ in last equation
-\AtEndEnvironment{equations}{\@pasteDescription}
+\AtEndEnvironment{equations}{\@renderdescription}
 
 %%%%%%%%%%%%%%%%%%%% DECLARE INTERFACE FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
 
@@ -162,7 +160,7 @@
 
 \newcommand{\@resetcomment}{\global\let\@description\relax} % \@description
 \newcommand{\@resetunit}{\global\let\@description\relax} % undefine \@description
-\newcommand{\@pasteDescription}
+\newcommand{\@renderdescription}
 {%
     \@ifundefined{@description}{}%
     {%
