@@ -101,7 +101,7 @@
     \let\commentunit\@setcommentunit % Make the method public inside the environment.
     \let\qed\@qed % Make the method public inside the environment.
 %
-    \apptocmd{\label}{\yesnumber}{}{} % add citation
+    \apptocmd{\label}{\@label{}}{}{} % add citation
 %
     \global\let\sublabel\label % Alias method \sublabel
     \pretocmd{\sublabel}{\yessubnumber}{}{} % add citation
@@ -143,6 +143,11 @@
 \newcommand{\@qed}
 {
     \intertext{\raggedleft $\Box$}
+}
+
+\newcommand{\@label}[1]
+{
+    \yesnumber
 }
 
 %%%%%%%%%%%%%%%%%%%% DECLARE PRIVATE FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
