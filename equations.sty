@@ -97,32 +97,8 @@
 {
     \@resetcomment  % Fix empty desciption in first line
 %
-    \renewcommand{\@setcomment}[1]
-    {
-        \@resetcomment
-        \gnewcommand{\@description}
-        {%
-            &\quad%
-            \begin{array}{|p{\@commentwidth}}%
-                #1%
-            \end{array}%
-        }
-    }
-    \global\let\comment\@setcomment % Make the method public inside the environment.
-%
-    \renewcommand{\@setcommentunit}[1]
-    {
-        \@resetunit
-        \gnewcommand{\@description}
-        {%
-            &\quad%
-            \left[%
-                \unit{#1}%
-            \right]%
-        }
-    }
-    \global\let\commentunit\@setcommentunit % Make the method public inside the environment.
-%
+    \let\comment\@setcomment % Make the method public inside the environment.
+    \let\commentunit\@setcommentunit % Make the method public inside the environment.
     \let\qed\@qed % Make the method public inside the environment.
 %
     \apptocmd{\label}{\yesnumber}{}{} % add citation
@@ -140,8 +116,30 @@
 
 %%%%%%%%%%%%%%%%%%%% DECLARE INTERFACE FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
 
-\newcommand{\@setcomment}{}
-\newcommand{\@setcommentunit}{}
+\newcommand{\@setcomment}[1]
+{
+    \@resetcomment
+    \gnewcommand{\@description}
+    {%
+        &\quad%
+        \begin{array}{|p{\@commentwidth}}%
+            #1%
+        \end{array}%
+    }
+}
+
+\renewcommand{\@setcommentunit}[1]
+{
+    \@resetunit
+    \gnewcommand{\@description}
+    {%
+        &\quad%
+        \left[%
+            \unit{#1}%
+        \right]%
+    }
+}
+
 \newcommand{\@qed}
 {
     \intertext{\raggedleft $\Box$}
