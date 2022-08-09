@@ -12,7 +12,7 @@
 
 \makeatletter % Grant access to private commands (Name contains an @).
 
-\newcommand{\@label}[1]{\label{#1}}
+% \newcommand{\@label}[1]{\label{#1}}
 
 %%%%%%%%%%%%%%%%%%%% PACKAGE: DEFINE GLOBAL COMMAND %%%%%%%%%%%%%%%%%%%%
 
@@ -102,9 +102,9 @@
     \let\comment\@setcomment % Make the method public inside the environment.
     \let\commentunit\@setcommentunit % Make the method public inside the environment.
     \let\qed\@qed % Make the method public inside the environment.
+    \let\@builtinlabel\label
 %
-    \apptocmd{\label}{\@yesnumber{}}{}{} % add citation
-%
+    \let\label\@yesnumber % add citation
     \let\sublabel\@yessubnumber
 %
     \global\let\yessubnumber\IEEEyessubnumber    % Alias method \yessubnumber
@@ -149,12 +149,13 @@
 \newcommand{\@yesnumber}[1]
 {
     \yesnumber
+    \ifthenelse{\isempty{#1}}{}{\@builtinlabel{#1}} % don't create a label for empty names
 }
 
 \newcommand{\@yessubnumber}[1]
 {
     \IEEEyessubnumber
-    \ifthenelse{\isempty{#1}}{}{\@label{#1}} % don't create a label for empty names
+    \ifthenelse{\isempty{#1}}{}{\@builtinlabel{#1}} % don't create a label for empty names
 }
 
 %%%%%%%%%%%%%%%%%%%% DECLARE PRIVATE FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
