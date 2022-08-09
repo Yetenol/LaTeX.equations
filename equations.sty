@@ -123,11 +123,7 @@
     }
     \global\let\commentunit\@setcommentunit % Make the method public inside the environment.
 %
-    \renewcommand{\@qed}
-    {
-        \intertext{\raggedleft $\Box$}
-    }
-    \global\let\qed\@qed % Make the method public inside the environment.
+    \let\qed\@qed % Make the method public inside the environment.
 %
     \apptocmd{\label}{\yesnumber}{}{} % add citation
 %
@@ -146,7 +142,10 @@
 
 \newcommand{\@setcomment}{}
 \newcommand{\@setcommentunit}{}
-\newcommand{\@qed}{}
+\newcommand{\@qed}
+{
+    \intertext{\raggedleft $\Box$}
+}
 
 %%%%%%%%%%%%%%%%%%%% DECLARE PRIVATE FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
 
