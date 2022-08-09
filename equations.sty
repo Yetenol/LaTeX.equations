@@ -12,7 +12,6 @@
 
 \makeatletter % Grant access to private commands (Name contains an @).
 
-
 %%%%%%%%%%%%%%%%%%%% PACKAGE: DEFINE GLOBAL COMMAND %%%%%%%%%%%%%%%%%%%%
 
 \def\gnewcommand{\g@star@or@long\gnew@command}
@@ -28,15 +27,8 @@
 \let\grenew@command\renew@command
 \patchcmd{\grenew@command}{\new@command}{\gnew@command}{}{}
 
+%%%%%%%%%%%%%%%%%%%% PUBLIC FUNCTIONS %%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%% PUBLIC FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
-
-% Define \newmathsymbol \⟨macro name⟩ {⟨math expression⟩}
-% - assigns the desired math expression of a symbol or variable 
-%   to a macro which can thereafter be used like any other macro
-% - @param #1 ⟨macro name⟩: name of the mathematical symbol or variable
-% - @param #2 ⟨math expression⟩: mathematical term that is printed
-% - @throws ERROR if ⟨macro name⟩ has already been defined
 \newcommand\newmathsymbol[2]{%
     \NewDocumentCommand{#1}{s}{% define \⟨macro name⟩
       \IfBooleanTF{##1}% is starred variant called?
@@ -45,9 +37,6 @@
     }%
 }%
 
-% Define \renewmathsymbol \⟨macro name⟩ {⟨math expression⟩}
-% - Analogous to \newmathsymbol
-% - @throws ERROR if ⟨macro name⟩ has not previously been defined
 \newcommand\renewmathsymbol[2]{
     \RenewDocumentCommand{#1}{s}{% define \⟨macro name⟩
       \IfBooleanTF{##1}% is starred variant called?
@@ -56,9 +45,6 @@
     }%
 }%
 
-% Define \providemathsymbol \⟨macro name⟩ {⟨math expression⟩}
-% - Analogous to \newmathsymbol
-% - creates a new definition for ⟨macro name⟩ only if one has not already been given
 \newcommand\providemathsymbol[2]{
     \ProvideDocumentCommand{#1}{s}{% define \⟨macro name⟩
       \IfBooleanTF{##1}% is starred variant called?
@@ -67,9 +53,6 @@
     }%
 }%
 
-% Define \renewmathsymbol \⟨macro name⟩ {⟨math expression⟩}
-% - will always create the new definition, irrespective of any existing ⟨macro name⟩ with the same name
-% - this should be used sparingly.
 \newcommand\declaremathsymbol[2]{
     \DeclareDocumentCommand{#1}{s}{% define \⟨macro name⟩
       \IfBooleanTF{##1}% is starred variant called?
@@ -79,11 +62,6 @@
 }%
 
 
-% Define environment \begin{equations} or \begin{equations}[columns]
-% - beatify multiple centered equations with comments, alignment and numbers
-% - allows only aligning one equation sign
-% @param * enable citation numbers by default
-% @param #1 columns and their types used to display all equations
 \newenvironment{equations}[1][\@columnsalignoneequalsign]
 {
     \begin{IEEEeqnarray*}{#1l} % l for description column
@@ -99,9 +77,6 @@
     \end{IEEEeqnarray}
 }
 
-% Define setter \setcommentwidth {⟨comment width⟩}
-% - setter for \@commentwidth
-% - @param #1 ⟨comment width⟩: width of the column that displays the equation comments
 \newcommand{\setcommentwidth}[1]
 {
     \ifthenelse{\isempty{#1}} % parameter omitted?
@@ -113,29 +88,15 @@
     }
 }
 
+%%%%%%%%%%%%%%%%%%%% PUBLIC METHODS %%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%% PUBLIC METHODS: %%%%%%%%%%%%%%%%%%%%
-% - only accessible inside the environment equations
-
-% Define method \intertext{text}
-% - write a regular paragraph across the entire columnwidth between two equations
-% - call it after the \\ of the last equation without any further commands
-% - don't put a \\ in front of the next equation
-% - only accessible inside the environment (aka method)
-% @param #1 Regular text to display (no math mode)
+% intertext
 \patchcmd{\@IEEEeqnarray}{\relax}{\relax\intertext@}{}{}
 
 \AtBeginEnvironment{equations}
 {
-    % Fix empty desciption in first line
-    \@resetcomment
+    \@resetcomment  % Fix empty desciption in first line
 %
-    % Define method \comment{text}
-    % - write a regular paragraph into the description column
-    % - seperate the comment with a vertical line and some horizontal space
-    % - comments have a fixed width
-    % - call it as the last command in a row and after two &
-    % @param  #1    Regular text to display (no math mode)
     \renewcommand{\@setcomment}[1]
     {
         \@resetcomment
@@ -149,11 +110,6 @@
     }
     \global\let\comment\@setcomment % Make the method public inside the environment.
 %
-%
-    % Define method \commentunit{text}
-    % - write a unit into the description column
-    % - seperate the unit with horizontal space
-    % @param  #1    Units to display non-italics (yes math mode)
     \renewcommand{\@setcommentunit}[1]
     {
         \@resetunit
@@ -167,51 +123,30 @@
     }
     \global\let\commentunit\@setcommentunit % Make the method public inside the environment.
 %
-%
-    % Define method \qed
-    % - draw a square (meaning quod erum demonstrandum) at the end of the row
-    % - call it after the \\ of the last equation
-    % - don't call other command in the same row
     \renewcommand{\@qed}
     {
         \intertext{\raggedleft $\Box$}
     }
     \global\let\qed\@qed % Make the method public inside the environment.
 %
-%
-    % Modify method \label{name}
-    % - attach a node for cross-referencing e.g. \eqnref{eqn:EXAMPLE}
-    % - automatically show citation number e.g. (3)
-    % @param #1 new node for cross-referencing e.g. \label{eqn:EXAMPLE}
     \apptocmd{\label}{\yesnumber}{}{} % add citation
-    %
-    % Define method \sublabel{name}
-    % - attach a node for cross-referencing
-    % - automatically show citation number with letter e.g. (3a)
+%
     \global\let\sublabel\label % Alias method \sublabel
     \pretocmd{\sublabel}{\yessubnumber}{}{} % add citation
 %
-%
-    % Define method \eqnref{name}
-    % - reference another equation
     \renewcommand{\@eqnref}[1]
     {%
         (\ref{#1})%
     }
     \global\let\eqnref\@eqnref % Make the method public inside the environment.
 %
+    \global\let\yessubnumber\IEEEyessubnumber    % Alias method \yessubnumber
 %
-    % Alias method \yessubnumber
-    \global\let\yessubnumber\IEEEyessubnumber
-%
-%
-    % Paste the description column
-    \pretocmd{\@IEEEeqnarraycr}{\@pasteDescription}
+    \pretocmd{\@IEEEeqnarraycr}{\@pasteDescription}   % Paste the description column
 }
 
 % Fix no description because of missing \\ in last equation
 \AtEndEnvironment{equations}{\@pasteDescription}
-
 
 %%%%%%%%%%%%%%%%%%%% DECLARE INTERFACE FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
 
@@ -234,11 +169,6 @@
     }
 }
 
-% Define \@throwunlessmath {⟨math expression⟩} {⟨macro name⟩}
-% - print math expression if in math mode
-% @param #1 ⟨math expression⟩: expression to be printed
-% @param #2 ⟨macro name⟩: macro name for error message
-% @throws ERROR if in text mode
 \newcommand\@throwunlessmath[2]{%
     \relax\ifmmode%
         {#1}%
@@ -247,13 +177,11 @@
     \fi%
 }
 
-
-%%%%%%%%%%%%%%%%%%%% DECLARE PRIVATE VARIABLES: %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% DECLARE PRIVATE VARIABLES %%%%%%%%%%%%%%%%%%%%
 
 \newcommand{\@description}{}
 \newcommand{\@columnsalignoneequalsign}{rCl}
 \newcommand{\@commentwidth}{}
 \setcommentwidth{} % initialize default value
-
 
 \makeatother % Revoke access to private commands (Name contains an @).
