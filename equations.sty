@@ -134,12 +134,6 @@
     \global\let\sublabel\label % Alias method \sublabel
     \pretocmd{\sublabel}{\yessubnumber}{}{} % add citation
 %
-    \renewcommand{\@eqnref}[1]
-    {%
-        (\ref{#1})%
-    }
-    \global\let\eqnref\@eqnref % Make the method public inside the environment.
-%
     \global\let\yessubnumber\IEEEyessubnumber    % Alias method \yessubnumber
 %
     \pretocmd{\@IEEEeqnarraycr}{\@pasteDescription}   % Paste the description column
@@ -153,8 +147,6 @@
 \newcommand{\@setcomment}{}
 \newcommand{\@setcommentunit}{}
 \newcommand{\@qed}{}
-\newcommand{\@eqnref}{}
-
 
 %%%%%%%%%%%%%%%%%%%% DECLARE PRIVATE FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
 
