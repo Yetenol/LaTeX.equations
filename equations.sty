@@ -12,7 +12,7 @@
 
 \makeatletter % Grant access to private commands (Name contains an @).
 
-\let\@builtinlabel\label
+\newcommand{\@label}[1]{\label{#1}}
 
 %%%%%%%%%%%%%%%%%%%% PACKAGE: DEFINE GLOBAL COMMAND %%%%%%%%%%%%%%%%%%%%
 
@@ -154,7 +154,7 @@
 \newcommand{\@yessubnumber}[1]
 {
     \IEEEyessubnumber
-    \ifthenelse{\isempty{#1}}{}{\label{#1}} % don't create a label for empty names
+    \ifthenelse{\isempty{#1}}{}{\@label{#1}} % don't create a label for empty names
 }
 
 %%%%%%%%%%%%%%%%%%%% DECLARE PRIVATE FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
