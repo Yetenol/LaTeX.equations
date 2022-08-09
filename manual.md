@@ -1,164 +1,157 @@
-<h1> Code documentation </h1>
+<h1> User manual </h1>
 
 [⌂](README.md) ›
 
 Table of Contents
-- [User macros](#user-macros)
-  - [newmathsymbol](#newmathsymbol)
-  - [renewmathsymbol](#renewmathsymbol)
-  - [providemathsymbol](#providemathsymbol)
-  - [renewmathsymbol](#renewmathsymbol-1)
-  - [equations environment](#equations-environment)
-  - [setcommentwidth](#setcommentwidth)
+- [Custom math symbols / snippets](#custom-math-symbols--snippets)
+- [equations environment](#equations-environment)
+  - [Modify comment width](#modify-comment-width)
 - [Environment specific user macros](#environment-specific-user-macros)
-  - [intertext](#intertext)
-  - [comment](#comment)
-  - [commentunit](#commentunit)
-  - [qed](#qed)
-  - [label](#label)
-  - [sublabel](#sublabel)
+  - [Insert text between equation lines](#insert-text-between-equation-lines)
+  - [Annotate an equation](#annotate-an-equation)
+  - [Specify the unit of an equation](#specify-the-unit-of-an-equation)
+  - [Quod erum demonstrandum](#quod-erum-demonstrandum)
+  - [Name and cross-reference an equation](#name-and-cross-reference-an-equation)
 
-# User macros
-Public functions are accessible everywhere within the project.
-
-## newmathsymbol
+# Custom math symbols / snippets
+Create a custom snippet to use math expressions repeatedly.
 ```latex
 \newmathsymbol{\⟨macro name⟩}{⟨math expression⟩}
 ```
-- Create a custom snippet to use math expressions repeatedly
-- **@param** #1 ⟨macro name⟩: name of the mathematical symbol or variable
-- **@param** #2 ⟨math expression⟩: mathematical term that is printed
-- **@throws** ERROR if ⟨macro name⟩ has already been defined
+- **⟨macro name⟩**: name of the mathematical symbol or variable
+- **⟨math expression⟩**: mathematical term that is printed
+- throws ERROR if ⟨macro name⟩ has already been defined
 
-## renewmathsymbol
-```latex
-\renewmathsymbol{\⟨macro name⟩}{⟨math expression⟩}
-```
-- Analog to \newmathsymbol
-- **@throws** ERROR if ⟨macro name⟩ has not previously been defined
+Examples
+- Definition in the preample
+    ```latex
+    \newmathsymbol{\Rmax}{R_\mathrm{max}}
+    \newmathsymbol{\bfg}{\left|\underline{H}\right|_\mathrm{dB}} % Betragsfrequenzgang
+    ```
+- Usage in the document
+    ```latex
+    The resistor \Rmax* has the characteristic value $\Rmax = \qty{10}{\kilo\ohm}$.
+    Let us consider the amount \bfg*.
+    ```
 
-## providemathsymbol
-```latex
-\providemathsymbol{\⟨macro name⟩}{⟨math expression⟩}
-```
-- Analog to \newmathsymbol
-- creates a new definition for ⟨macro name⟩ only if one has not already been given
+Variations
+- **newmathsymbol**  
+    Create a new symbol. **Recommended**
+    ```latex
+    \newmathsymbol{\⟨macro name⟩}{⟨math expression⟩}
+    ```
+- **renewmathsymbol**  
+    Explicitly replace an existing symbol.
+    ```latex
+    \renewmathsymbol{\⟨macro name⟩}{⟨math expression⟩}
+    ```
+- **providemathsymbol**  
+    Only creates the symbol if it has not been defined yet. Never overrides.
+    ```latex
+    \providemathsymbol{\⟨macro name⟩}{⟨math expression⟩}
+    ```
+- **declaremathsymbol**  
+    Will always create and override the symbol, irrespective of any previous definitions.  
+    This should be used sparingly!  
+    `\declaremathsymbol{\⟨macro name⟩}{⟨math expression⟩}`  
 
-## renewmathsymbol
-```latex
-\renewmathsymbol{\⟨macro name⟩}{⟨math expression⟩}
-```
-- will always create the new definition, irrespective of any existing ⟨macro name⟩ with the same name
-- this should be used sparingly.
-
-## equations environment
+# equations environment
+Create a calculation with standardized alignment, comments, units, equation numbers and descriptions.
 ```latex
 \begin{equations}
+\end{equations}
 ``` 
-or  
-```latex
-\begin{equations}[⟨column setup⟩]
-```
-- beatify multiple centered equations with comments, alignment and numbers
-- allows only aligning one equation sign
-- **@star variant**: enable citation numbers by default
-- **@param** #1 ⟨column setup⟩: columns and their types used to display all equations
+- by default, aligns one equation sign
+- **star variant**: enable citation numbers by default
+- **⟨column setup⟩**: columns and their types used to display all equations
 
-## setcommentwidth
+Variations 
+- **Custom alignment** setup  
+    List LaTeX `columntypes` to align multiple equation lines
+    ```latex
+    \begin{equations}[⟨column setup⟩]
+    ```
+    Example: `\begin{equations}[rCll]`
+
+## Modify comment width
+By default, comments take up one third of the writable page width.  
+This width can be modified inside the environment for the current environment or outside for multiple.
 ```latex
 \setcommentwidth{⟨comment width⟩}
 ```
-- setter for \@commentwidth
-- **@param** #1 ⟨comment width⟩: width of the column that displays the equation comments
+- **⟨comment width⟩**: width of the column that displays the equation comments or units
 
 # Environment specific user macros
-Methods are functions which are only accessible inside the `{equations}` environment.
+The following macros are only available inside the `equations` environment.
 
-## intertext
+## Insert text between equation lines
+Divide the equation block in two and write a conventional text paragraph between them.
 ```latex
-\intertext{⟨text⟩}
+\intertext{⟨paragraph⟩}
 ```
-- write a regular paragraph across the entire page between two equations
+- **⟨paragraph⟩**: Regular text to display (no math mode)
 - call it after the `\\` of the last equation without any further commands
 - don't put a `\\` in front of the next equation
-- **@param** #1 ⟨text⟩: Regular text to display (no math mode)
 
-## comment
+Example:
+
 ```latex
-\comment{⟨text⟩}
+\begin{equations}
+    U_1 &=& R_1 \cdot I_1 \\
+\intertext{Analog ergibt sich:}
+    U_2 &=& R_2 \cdot I_2 
+\end{equations}
 ```
-- write a regular paragraph into the description column
-- seperate the comment with a vertical line and some horizontal space
-- comments have a fixed width
-- call it as the last command in a row and after two &
-- **@param**  #1 ⟨text⟩: Regular text to display (no math mode)
 
-Implementation
-- Require the `{equations}` environment:  
-    The method `\comment` is defined at the beginning of every `{equations}` environment.  
-    It calls the private function `\@SetComment` to fulfill its functionality.
-- Print the text at the end of the line:  
-    Call the private function `\@RenderDescription`
-
-## commentunit
+## Annotate an equation
+Annotate the current equation line with wrapping text.
 ```latex
-\commentunit{⟨text⟩}
+\comment{⟨annotation text⟩}
 ```
-- write a unit into the description column
-- seperate the unit with horizontal space
-- **@param**  #1    Units to display non-italics (yes math mode)
+- **⟨annotation text⟩**: Regular text to display (no math mode)
+- the annotation gets separated with a vertical line and some horizontal space
+- if the allowed width gets exceeded, the text wraps
 
-Implementation
-- Require the `{equations}` environment:  
-    The method `\commentunit` is defined at the beginning of every `{equations}` environment.  
-    It calls the private function `\@SetCommentUnit` to fulfill its functionality.
-- Print the text at the end of the line:  
-    Call the private function `\@RenderDescription`
+## Specify the unit of an equation
+Note the unit for the terms of the current equation.
+```latex
+\commentunit{⟨unit expression⟩}
+```
+- **⟨unit expression⟩**: A math expression or macros from the `siunitx` dependency
+- the unit is surrounded by brackets and gets rendered at the right side of the page
+- some horizontal space separates it from the equation
 
-
-## qed
+## Quod erum demonstrandum
+Finish a mathematical proof.
 ```latex
 \qed
 ```
-- render a _quod erum demonstrandum_ represented by a square at the end of the row
-- call it after the \\ of the last equation
-- don't call other command in the same row
+- render a square on the right side of the page
+- call it after a linebreak `\\` at the end of the environment
 
-Implementation
-- Require the `{equations}` environment:  
-    The method `\qed` is defined at the beginning of every `{equations}` environment.  
-    It calls the private function `\@Qed` to fulfill its functionality.
-
-## label
+## Name and cross-reference an equation
+Give the current equation a name to be able to reference it. An equation number is displayed automatically.
 ```latex
 \label{⟨name⟩}
 ```
-- attach a node for cross-referencing e.g. `\eqref{eq:EXAMPLE}`
-- ensure a citation number for the current line e.g. `(3)`
-- **@param** #1 ⟨name⟩: new node for cross-referencing e.g. `\label{eq:EXAMPLE}`
-
-Implementation
-- Modify functionality if called within the `{equations}` environment:  
-    The method `\label` is replaces at the beginning of every `{equations}` environment.  
-    It calls the private function `\@YesNumber` to fulfill its functionality.
-- Create and render an equation number:  
-    Call `\IEEEyesnumber` from the `IEEEtrantools` dependency
-- Create a node for cross-referencing:  
-    Call the built-in function `\label{⟨name⟩}`.
-
-## sublabel
 ```latex
 \sublabel{⟨name⟩}
 ```
-- attach a node for cross-referencing
-- ensure a citation number for the current line with letter e.g. `(3a)`
+- attaches a node for cross-referencing
+- automatically create a citation number for the current line
+- **⟨name⟩**: new node for cross-referencing e.g. `\label{eq:EXAMPLE}`
+- `\label` renders as `(3)` and `\sublabel` renders as `(3a)`
 
-Implementation
-- Require the `{equations}` environment:  
-    The method `\sublabel` is defined at the beginning of every `{equations}` environment.  
-    It calls the internal macro `\@YesSubnumber` to fulfill its functionality.
-- Create an equation sub-number:  
-    Call `\IEEEyessubnumber` from the `IEEEtrantools` dependency
-- Create a node for cross-referencing:  
-    Call the built-in function `\label{⟨name⟩}`.
-- Let `\yessubnumber` be `\IEEEyessubnumber`
+Example
+
+- Equation
+    ```latex
+    \begin{equations}
+        \Phi &=& MI
+        \label{eq:magneticFlux}
+    \end{equations}
+    ```
+- Reference
+    ```latex
+    We have demonstrated this with equation \eqref{eq:magneticFlux}.
+    ```

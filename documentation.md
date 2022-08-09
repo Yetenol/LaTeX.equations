@@ -7,7 +7,7 @@
   - [newmathsymbol](#newmathsymbol)
   - [renewmathsymbol](#renewmathsymbol)
   - [providemathsymbol](#providemathsymbol)
-  - [renewmathsymbol](#renewmathsymbol-1)
+  - [declaremathsymbol](#declaremathsymbol)
   - [equations environment](#equations-environment)
   - [setcommentwidth](#setcommentwidth)
 - [Environment specific user macros](#environment-specific-user-macros)
@@ -53,33 +53,29 @@ Public functions are accessible everywhere within the project.
 ```latex
 \renewmathsymbol{\⟨macro name⟩}{⟨math expression⟩}
 ```
-- Analog to \newmathsymbol
+- Analog to `\newmathsymbol`, but explicitly replaces an existing symbol.
 - **@throws** ERROR if ⟨macro name⟩ has not previously been defined
 
 ## providemathsymbol
 ```latex
 \providemathsymbol{\⟨macro name⟩}{⟨math expression⟩}
 ```
-- Analog to \newmathsymbol
-- creates a new definition for ⟨macro name⟩ only if one has not already been given
+- Analog to `\newmathsymbol`, but only creates the symbol if it has not been defined yet. Never overrides.
 
-## renewmathsymbol
-```latex
-\renewmathsymbol{\⟨macro name⟩}{⟨math expression⟩}
-```
-- will always create the new definition, irrespective of any existing ⟨macro name⟩ with the same name
-- this should be used sparingly.
+## declaremathsymbol
+`\declaremathsymbol{\⟨macro name⟩}{⟨math expression⟩}`
+- Analog to `\newmathsymbol`, but will always create the new definition, irrespective of any existing ⟨macro name⟩ with the same name
+- this should be used sparingly
 
 ## equations environment
 ```latex
 \begin{equations}
 ``` 
-or  
 ```latex
 \begin{equations}[⟨column setup⟩]
 ```
-- beatify multiple centered equations with comments, alignment and numbers
-- allows only aligning one equation sign
+- create a calculation block containing equations
+- by default, aligns one equation sign
 - **@star variant**: enable citation numbers by default
 - **@param** #1 ⟨column setup⟩: columns and their types used to display all equations
 
@@ -88,29 +84,28 @@ or
 \setcommentwidth{⟨comment width⟩}
 ```
 - setter for \@commentwidth
-- **@param** #1 ⟨comment width⟩: width of the column that displays the equation comments
+- **@param** #1 ⟨comment width⟩: width of the column that displays the equation comments or units
 
 # Environment specific user macros
 Methods are functions which are only accessible inside the `{equations}` environment.
 
 ## intertext
 ```latex
-\intertext{⟨text⟩}
+\intertext{⟨paragraph⟩}
 ```
-- write a regular paragraph across the entire page between two equations
+- divide the equation block in two and write a conventional text paragraph between them
 - call it after the `\\` of the last equation without any further commands
 - don't put a `\\` in front of the next equation
-- **@param** #1 ⟨text⟩: Regular text to display (no math mode)
+- **@param** #1 ⟨paragraph⟩: Regular text to display (no math mode)
 
 ## comment
 ```latex
-\comment{⟨text⟩}
+\comment{⟨annotation text⟩}
 ```
 - write a regular paragraph into the description column
-- seperate the comment with a vertical line and some horizontal space
+- separate the comment with a vertical line and some horizontal space
 - comments have a fixed width
-- call it as the last command in a row and after two &
-- **@param**  #1 ⟨text⟩: Regular text to display (no math mode)
+- **@param** #1 ⟨annotation text⟩: Regular text to display (no math mode)
 
 Implementation
 - Require the `{equations}` environment:  
@@ -121,11 +116,11 @@ Implementation
 
 ## commentunit
 ```latex
-\commentunit{⟨text⟩}
+\commentunit{⟨unit expression⟩}
 ```
 - write a unit into the description column
-- seperate the unit with horizontal space
-- **@param**  #1    Units to display non-italics (yes math mode)
+- separate the unit with horizontal space
+- **@param** #1 ⟨unit expression⟩: A math expression or macros from the `siunitx` dependency
 
 Implementation
 - Require the `{equations}` environment:  
@@ -134,14 +129,12 @@ Implementation
 - Print the text at the end of the line:  
     Call the private function `\@RenderDescription`
 
-
 ## qed
 ```latex
 \qed
 ```
-- render a _quod erum demonstrandum_ represented by a square at the end of the row
-- call it after the \\ of the last equation
-- don't call other command in the same row
+- write a square at the right end of the line
+- call it after a linebreak `\\` at the end of the environment
 
 Implementation
 - Require the `{equations}` environment:  

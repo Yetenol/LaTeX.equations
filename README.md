@@ -2,7 +2,7 @@
 
 [⌂](README.md) Home
 
-> Enhance mathematical equations with standardized comments and units. Standardize and simplify equation numbers for cross-referencing, alignment across multiple lines and paragraph in between.
+> Enhance mathematical calculations with standardized comments and units. Standardize and simplify equation numbers for cross-referencing, alignment and paragraph in between.
 
 - **[User Manual ›](manual.md)**  
     Examples | `\newmathsymbol{\⟨macro name⟩}{⟨math expression⟩}`
