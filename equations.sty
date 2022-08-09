@@ -12,6 +12,8 @@
 
 \makeatletter % Grant access to private commands (Name contains an @).
 
+\let\@builtinlabel\label
+
 %%%%%%%%%%%%%%%%%%%% PACKAGE: DEFINE GLOBAL COMMAND %%%%%%%%%%%%%%%%%%%%
 
 \def\gnewcommand{\g@star@or@long\gnew@command}
@@ -101,10 +103,9 @@
     \let\commentunit\@setcommentunit % Make the method public inside the environment.
     \let\qed\@qed % Make the method public inside the environment.
 %
-    \apptocmd{\label}{\@label{}}{}{} % add citation
+    \apptocmd{\label}{\@yesnumber{}}{}{} % add citation
 %
-    \global\let\sublabel\label % Alias method \sublabel
-    \pretocmd{\sublabel}{\yessubnumber}{}{} % add citation
+    \let\sublabel\@yessubnumber
 %
     \global\let\yessubnumber\IEEEyessubnumber    % Alias method \yessubnumber
 %
@@ -145,9 +146,15 @@
     \intertext{\raggedleft $\Box$}
 }
 
-\newcommand{\@label}[1]
+\newcommand{\@yesnumber}[1]
 {
     \yesnumber
+}
+
+\newcommand{\@yessubnumber}[1]
+{
+    \label{#1}
+    \IEEEyessubnumber
 }
 
 %%%%%%%%%%%%%%%%%%%% DECLARE PRIVATE FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
