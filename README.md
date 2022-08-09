@@ -2,10 +2,29 @@
 
 Beatify multiple equations with comments and alignment.
 
+# Installation
+
+- add file **from External URL**  
+    Create a `./sty` subfolder and add the external file `equations.sty` using the following url.  
+    
+    Example: This is supported in Overleaf.
+    ```
+    https://raw.githubusercontent.com/Yetenol/LaTeX.equations/main/equations.sty
+    ```
+
+- add file **manually**  
+    Create a `./sty` subfolder and add the file [`equations.sty`](https://raw.githubusercontent.com/Yetenol/LaTeX.equations/main/equations.sty)
+
+# Usage
+
+- **Use package** in the preamble
+    ```latex
+    \usepackage{sty/equations}
+    ```
+
 Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
-- [Notes](#notes)
 - [Documentation](#documentation)
   - [Dependencies](#dependencies)
 - [User macros](#user-macros)
@@ -30,37 +49,6 @@ Table of Contents
   - [description](#description)
   - [defaultColumnsSetup](#defaultcolumnssetup)
   - [commentWidth](#commentwidth)
-
-# Installation
-
-- add file **from External URL**  
-    Create a `./sty` subfolder and add the external file `equations.sty` using the following url.  
-    
-    Example: This is supported in Overleaf.
-    ```
-    https://raw.githubusercontent.com/Yetenol/LaTeX.equations/main/equations.sty
-    ```
-
-- add file **manually**  
-    Create a `./sty` subfolder and add the file [`equations.sty`](https://raw.githubusercontent.com/Yetenol/LaTeX.equations/main/equations.sty)
-
-# Usage
-
-- **Use package** in the preamble
-    ```latex
-    \usepackage{sty/equations}
-    ```
-
-# Notes
-
-atBeginEnvironment
-\newcommand{\comment}{\@setcomment}
-
-outside:
-\newcommand{\@setcomment}
-
-delete eqnref
-rename pasteDescription to renderDescriptionColumn
 
 # Documentation
 
