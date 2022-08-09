@@ -154,7 +154,7 @@
 \newcommand{\@yessubnumber}[1]
 {
     \IEEEyessubnumber
-    \label{#1}
+    \ifthenelse{\isempty{#1}}{}{\label{#1}} % don't create a label for empty names
 }
 
 %%%%%%%%%%%%%%%%%%%% DECLARE PRIVATE FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
