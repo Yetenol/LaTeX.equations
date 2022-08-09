@@ -102,7 +102,7 @@
     \let\label\@YesNumber
     \let\sublabel\@YesSubnumber
     \let\comment\@SetComment
-    \let\commentunit\@SetCommentUnit
+    \let\equnit\@SetEquationUnit
     \let\qed\@Qed
 %
     \@ClearDescription
@@ -148,7 +148,7 @@
     }
 }
 
-\newcommand{\@SetCommentUnit}[1]
+\newcommand{\@SetEquationUnit}[1]
 {
     \@ClearDescription
     \gnewcommand{\@description}
@@ -179,5 +179,16 @@
 \newcommand{\@defaultColumnsSetup}{rCl}
 \newcommand{\@commentWidth}{}
 \setcommentwidth{} % initialize default value
+
+%%%%%%%%%%%%%%%%%%%% DECRECATED MACROS %%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\eqnref}[1]{
+    \eqref{#1}
+    \PackageWarning{equations}{Use ⧵eqref instead of ⧵eqnref. The macro is deprecated}
+}
+\newcommand{\commentunit}[1]{
+    \equnit{#1}
+    \PackageWarning{equations}{Use ⧵equnit instead of ⧵commentunit. The macro is deprecated}
+}
 
 \makeatother % Revoke access to internal macros (Name contains an @).

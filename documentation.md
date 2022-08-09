@@ -114,9 +114,9 @@ Implementation
 - Print the text at the end of the line:  
     Call the private function `\@RenderDescription`
 
-## commentunit
+## equnit
 ```latex
-\commentunit{⟨unit expression⟩}
+\equnit{⟨unit expression⟩}
 ```
 - write a unit into the description column
 - separate the unit with horizontal space

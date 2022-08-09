@@ -115,7 +115,7 @@ Annotate the current equation line with wrapping text.
 ## Specify the unit of an equation
 Note the unit for the terms of the current equation.
 ```latex
-\commentunit{⟨unit expression⟩}
+\equnit{⟨unit expression⟩}
 ```
 - **⟨unit expression⟩**: A math expression or macros from the `siunitx` dependency
 - the unit is surrounded by brackets and gets rendered at the right side of the page
