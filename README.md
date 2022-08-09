@@ -8,28 +8,28 @@ Table of Contents
 - [Notes](#notes)
 - [Documentation](#documentation)
   - [Dependencies](#dependencies)
-- [Public functions](#public-functions)
+- [User macros](#user-macros)
   - [newmathsymbol](#newmathsymbol)
   - [renewmathsymbol](#renewmathsymbol)
   - [providemathsymbol](#providemathsymbol)
   - [renewmathsymbol](#renewmathsymbol-1)
   - [equations environment](#equations-environment)
   - [setcommentwidth](#setcommentwidth)
-- [Environment methods](#environment-methods)
+- [Environment specific user macros](#environment-specific-user-macros)
   - [intertext](#intertext)
   - [comment](#comment)
   - [commentunit](#commentunit)
   - [qed](#qed)
   - [label](#label)
   - [sublabel](#sublabel)
-- [Private functions](#private-functions)
-  - [cleardescription](#cleardescription)
-  - [renderdescription](#renderdescription)
-  - [throwunlessmath](#throwunlessmath)
-- [Private attributes](#private-attributes)
+- [Internal macros](#internal-macros)
+  - [ClearDescription](#cleardescription)
+  - [RenderDescription](#renderdescription)
+  - [ThrowUnlessMath](#throwunlessmath)
+- [Internal variables](#internal-variables)
   - [description](#description)
-  - [columnsalignoneequalsign](#columnsalignoneequalsign)
-  - [commentwidth](#commentwidth)
+  - [defaultColumnsSetup](#defaultcolumnssetup)
+  - [commentWidth](#commentwidth)
 
 # Installation
 
@@ -80,7 +80,7 @@ rename pasteDescription to renderDescriptionColumn
 | etoolbox      | modify existing environments from other packages |
 | xifthen       | detect empty arguments                           |
 
-# Public functions
+# User macros
 Public functions are accessible everywhere within the project.
 
 ## newmathsymbol
@@ -133,7 +133,7 @@ or
 - setter for \@commentwidth
 - **@param** #1 ⟨comment width⟩: width of the column that displays the equation comments
 
-# Environment methods
+# Environment specific user macros
 Methods are functions which are only accessible inside the `{equations}` environment.
 
 ## intertext
@@ -154,7 +154,13 @@ Methods are functions which are only accessible inside the `{equations}` environ
 - comments have a fixed width
 - call it as the last command in a row and after two &
 - **@param**  #1 ⟨text⟩: Regular text to display (no math mode)
-- The environment requirement is implemented by the method `\comment` calling the internal function `\@setcomment`.
+
+Implementation
+- Require the `{equations}` environment:  
+    The method `\comment` is defined at the beginning of every `{equations}` environment.  
+    It calls the private function `\@SetComment` to fulfill its functionality.
+- Print the text at the end of the line:  
+    Call the private function `\@RenderDescription`
 
 ## commentunit
 ```latex
@@ -167,9 +173,9 @@ Methods are functions which are only accessible inside the `{equations}` environ
 Implementation
 - Require the `{equations}` environment:  
     The method `\commentunit` is defined at the beginning of every `{equations}` environment.  
-    It calls the internal function `\@setcommentunit` to fulfill its functionality.
+    It calls the private function `\@SetCommentUnit` to fulfill its functionality.
 - Print the text at the end of the line:  
-    Call the private function `\@pasteDescription`
+    Call the private function `\@RenderDescription`
 
 
 ## qed
@@ -183,68 +189,75 @@ Implementation
 Implementation
 - Require the `{equations}` environment:  
     The method `\qed` is defined at the beginning of every `{equations}` environment.  
-    It calls the internal function `\@qed` to fulfill its functionality.
+    It calls the private function `\@Qed` to fulfill its functionality.
 
 ## label
 ```latex
 \label{⟨name⟩}
 ```
-- attach a node for cross-referencing e.g. \eqnref{eqn:EXAMPLE}
-- ensure a citation number for the current line e.g. (3)
-- **@param** #1 ⟨name⟩: new node for cross-referencing e.g. \label{eqn:EXAMPLE}
+- attach a node for cross-referencing e.g. `\eqref{eq:EXAMPLE}`
+- ensure a citation number for the current line e.g. `(3)`
+- **@param** #1 ⟨name⟩: new node for cross-referencing e.g. `\label{eq:EXAMPLE}`
 
 Implementation
-- modify the built-in function `\label`
-- Create an equation number:  
-    Call `\yesnumber` from the `IEEEtrantools` dependency
+- Modify functionality if called within the `{equations}` environment:  
+    The method `\label` is replaces at the beginning of every `{equations}` environment.  
+    It calls the private function `\@YesNumber` to fulfill its functionality.
+- Create and render an equation number:  
+    Call `\IEEEyesnumber` from the `IEEEtrantools` dependency
+- Create a node for cross-referencing:  
+    Call the built-in function `\label{⟨name⟩}`.
 
 ## sublabel
 ```latex
 \sublabel{⟨name⟩}
 ```
 - attach a node for cross-referencing
-- ensure a citation number for the current line with letter e.g. (3a)
+- ensure a citation number for the current line with letter e.g. `(3a)`
 
 Implementation
-- Create a node for cross-referencing:  
-    It calls the built-in function `\label`.
+- Require the `{equations}` environment:  
+    The method `\sublabel` is defined at the beginning of every `{equations}` environment.  
+    It calls the internal macro `\@YesSubnumber` to fulfill its functionality.
 - Create an equation sub-number:  
-    Call `\yessubnumber` from the `IEEEtrantools` dependency
-- Alias `\yessubnumber` to `\IEEEyessubnumber` from the `IEEEtrantools` dependency
+    Call `\IEEEyessubnumber` from the `IEEEtrantools` dependency
+- Create a node for cross-referencing:  
+    Call the built-in function `\label{⟨name⟩}`.
+- Let `\yessubnumber` be `\IEEEyessubnumber`
 
-# Private functions
+# Internal macros
 Private functions are only accessible inside packages. Their name contains an `@` character. 
 
-## cleardescription
-> `\@cleardescription`
-- clear the `description` variable to undefined
+## ClearDescription
+> `\@ClearDescription`
+- clear the `\@description` variable to undefined
 
-## renderdescription
-> `\@pasteDescription}`
+## RenderDescription
+> `\@RenderDescription}`
 - render a description paragraph in the comment column
 - only runs if a comment or commentunit has been set for the current line
 
-## throwunlessmath
-> `\@throwunlessmath{⟨math expression⟩}{⟨macro name⟩}`
+## ThrowUnlessMath
+> `\@ThrowUnlessMath{⟨math expression⟩}{⟨macro name⟩}`
 - print math expression if in math mode
 - **@param** #1 ⟨math expression⟩: expression to be rendered
 - **@param** #2 ⟨macro name⟩: macro name for error message
 - **@throws** ERROR if in text mode
 
-# Private attributes
+# Internal variables
 Attributes are variables which are only accessible inside packages.
 
 ## description
 > `\@description`
 - stores the current line's comment or commentunit
 
-## defaultcolumnssetup
-> `\@defaultcolumnssetup`
+## defaultColumnsSetup
+> `\@defaultColumnsSetup`
 - stores the default columns setup `rCl`:  
     a right-aligned expression,  
     an equals sign and  
     a left-aligned expression
 
-## commentwidth
-> `\@commentwidth`
+## commentWidth
+> `\@commentWidth`
 - stores the width of the description column

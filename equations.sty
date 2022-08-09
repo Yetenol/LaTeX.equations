@@ -10,9 +10,9 @@
 \RequirePackage{xifthen}        % detect empty arguments
 
 
-\makeatletter % Grant access to private commands (Name contains an @).
+\makeatletter % Grant access to internal macros (Name contains an @).
 
-%%%%%%%%%%%%%%%%%%%% PACKAGE: DEFINE GLOBAL COMMAND %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% PACKAGE: DEFINE GLOBAL VARIABLES %%%%%%%%%%%%%%%%%%%%
 
 \def\gnewcommand{\g@star@or@long\gnew@command}
 \def\grenewcommand{\g@star@or@long\grenew@command}
@@ -27,51 +27,51 @@
 \let\grenew@command\renew@command
 \patchcmd{\grenew@command}{\new@command}{\gnew@command}{}{}
 
-%%%%%%%%%%%%%%%%%%%% PUBLIC FUNCTIONS %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% USER MACROS %%%%%%%%%%%%%%%%%%%%
 
 \newcommand\newmathsymbol[2]{%
-    \NewDocumentCommand{#1}{s}{% define \⟨macro name⟩
-      \IfBooleanTF{##1}% is starred variant called?
+    \NewDocumentCommand{#1}{s}{% optional star (##1), no further parameters
+      \IfBooleanTF{##1}% is starred variant?
         {\ensuremath{#2}}%
-        {\@throwunlessmath{#2}{#1}}%
+        {\@ThrowUnlessMath{#2}{#1}}%
     }%
 }%
 
 \newcommand\renewmathsymbol[2]{
-    \RenewDocumentCommand{#1}{s}{% define \⟨macro name⟩
-      \IfBooleanTF{##1}% is starred variant called?
+    \RenewDocumentCommand{#1}{s}{% optional star (##1), no further parameters
+      \IfBooleanTF{##1}% is starred variant?
         {\ensuremath{#2}}%
-        {\@throwunlessmath{#2}{#1}}%
+        {\@ThrowUnlessMath{#2}{#1}}%
     }%
 }%
 
 \newcommand\providemathsymbol[2]{
-    \ProvideDocumentCommand{#1}{s}{% define \⟨macro name⟩
-      \IfBooleanTF{##1}% is starred variant called?
+    \ProvideDocumentCommand{#1}{s}{% optional star (##1), no further parameters
+      \IfBooleanTF{##1}% is starred variant?
         {\ensuremath{#2}}%
-        {\@throwunlessmath{#2}{#1}}%
+        {\@ThrowUnlessMath{#2}{#1}}%
     }%
 }%
 
 \newcommand\declaremathsymbol[2]{
-    \DeclareDocumentCommand{#1}{s}{% define \⟨macro name⟩
-      \IfBooleanTF{##1}% is starred variant called?
+    \DeclareDocumentCommand{#1}{s}{% optional star (##1), no further parameters
+      \IfBooleanTF{##1}% is starred variant?
         {\ensuremath{#2}}%
-        {\@throwunlessmath{#2}{#1}}%
+        {\@ThrowUnlessMath{#2}{#1}}%
     }%
 }%
 
 
-\newenvironment{equations}[1][\@defaultcolumnssetup]
+\newenvironment{equations}[1][\@defaultColumnsSetup]
 {
-    \begin{IEEEeqnarray*}{#1l} % l for description column
+    \begin{IEEEeqnarray*}{#1l} % add a left-aligned description column
 }
 {
     \end{IEEEeqnarray*}
 }
-\newenvironment{equations*}[1][\@defaultcolumnssetup]
+\newenvironment{equations*}[1][\@defaultColumnsSetup]
 {
-    \begin{IEEEeqnarray}{#1l} % l for description column
+    \begin{IEEEeqnarray}{#1l} % add a left-aligned description column
 }
 {
     \end{IEEEeqnarray}
@@ -79,57 +79,78 @@
 
 \newcommand{\setcommentwidth}[1]
 {
-    \ifthenelse{\isempty{#1}} % parameter omitted?
+    \ifthenelse{\isempty{#1}} % is parameter omitted?
     {
-        \renewcommand{\@commentwidth}{0.33\columnwidth} % default value
+        \renewcommand{\@commentWidth}{0.33\columnwidth} % default width
     }
     {
-        \renewcommand{\@commentwidth}{#1} % override value
+        \renewcommand{\@commentWidth}{#1} % custom width
     }
 }
 
-%%%%%%%%%%%%%%%%%%%% PUBLIC METHODS %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% ENVIRONMENT SPECIFIC USER MACROS %%%%%%%%%%%%%%%%%%%%
 
-% intertext
+% make \intertext known to the IEEEeqnarray environment
 \patchcmd{\@IEEEeqnarray}{\relax}{\relax\intertext@}{}{}
 
 \AtBeginEnvironment{equations}
 {
-    \@cleardescription  % Fix empty desciption in first line
-    % Grant access to environment methods
-    \let\comment\@setcomment
-    \let\commentunit\@setcommentunit
-    \let\qed\@qed
+    \let\yessubnumber\IEEEyessubnumber   % standardize IEEEeqnarray's macro name
+    \let\@builtinlabel\label   % Copy a reference to the build-in label macro to call later
 %
-    \let\@builtinlabel\label
-    \let\label\@yesnumber
-    \let\sublabel\@yessubnumber
+    % Grant access to environment specific user macros
+    \let\label\@YesNumber
+    \let\sublabel\@YesSubnumber
+    \let\comment\@SetComment
+    \let\commentunit\@SetCommentUnit
+    \let\qed\@Qed
 %
-    \let\yessubnumber\IEEEyessubnumber    % Alias method \yessubnumber
-%
-    \pretocmd{\@IEEEeqnarraycr}{\@renderdescription}   % Paste the description column
+    \@ClearDescription
+    \pretocmd{\@IEEEeqnarraycr}{\@RenderDescription}   % attach description rendering to end of the line
 }
 
 % Fix no description because of missing \\ in last equation
-\AtEndEnvironment{equations}{\@renderdescription}
+\AtEndEnvironment{equations}{\@RenderDescription}
 
-%%%%%%%%%%%%%%%%%%%% DECLARE INTERFACE FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% INTERNAL MACROS %%%%%%%%%%%%%%%%%%%%
 
-\newcommand{\@setcomment}[1]
+\newcommand{\@YesNumber}[1]
 {
-    \@cleardescription
+    \yesnumber
+    \ifthenelse{\isempty{#1}}{}{\@builtinlabel{#1}} % don't create a label for empty names
+}
+
+\newcommand{\@YesSubnumber}[1]
+{
+    \yessubnumber
+    \ifthenelse{\isempty{#1}}{}{\@builtinlabel{#1}} % don't create a label for empty names
+}
+
+\newcommand{\@ClearDescription}{\global\let\@description\relax} % \@description
+\newcommand{\@RenderDescription}
+{%
+    \@ifundefined{@description}{}%
+    {%
+        \@description% Insert description
+        \@ClearDescription% Reset description for next line
+    }
+}
+
+\newcommand{\@SetComment}[1]
+{
+    \@ClearDescription
     \gnewcommand{\@description}
     {%
         &\quad%
-        \begin{array}{|p{\@commentwidth}}%
+        \begin{array}{|p{\@commentWidth}}%
             #1%
         \end{array}%
     }
 }
 
-\newcommand{\@setcommentunit}[1]
+\newcommand{\@SetCommentUnit}[1]
 {
-    \@cleardescription
+    \@ClearDescription
     \gnewcommand{\@description}
     {%
         &\quad%
@@ -139,36 +160,12 @@
     }
 }
 
-\newcommand{\@qed}
+\newcommand{\@Qed}
 {
     \intertext{\raggedleft $\Box$}
 }
 
-\newcommand{\@yesnumber}[1]
-{
-    \yesnumber
-    \ifthenelse{\isempty{#1}}{}{\@builtinlabel{#1}} % don't create a label for empty names
-}
-
-\newcommand{\@yessubnumber}[1]
-{
-    \IEEEyessubnumber
-    \ifthenelse{\isempty{#1}}{}{\@builtinlabel{#1}} % don't create a label for empty names
-}
-
-%%%%%%%%%%%%%%%%%%%% DECLARE PRIVATE FUNCTIONS: %%%%%%%%%%%%%%%%%%%%
-
-\newcommand{\@cleardescription}{\global\let\@description\relax} % \@description
-\newcommand{\@renderdescription}
-{%
-    \@ifundefined{@description}{}%
-    {%
-        \@description% Insert description
-        \@cleardescription% Reset description for next line
-    }
-}
-
-\newcommand\@throwunlessmath[2]{%
+\newcommand\@ThrowUnlessMath[2]{%
     \relax\ifmmode%
         {#1}%
     \else%
@@ -176,11 +173,11 @@
     \fi%
 }
 
-%%%%%%%%%%%%%%%%%%%% DECLARE PRIVATE VARIABLES %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% INTERNAL VARIABLES %%%%%%%%%%%%%%%%%%%%
 
 \newcommand{\@description}{}
-\newcommand{\@defaultcolumnssetup}{rCl}
-\newcommand{\@commentwidth}{}
+\newcommand{\@defaultColumnsSetup}{rCl}
+\newcommand{\@commentWidth}{}
 \setcommentwidth{} % initialize default value
 
-\makeatother % Revoke access to private commands (Name contains an @).
+\makeatother % Revoke access to internal macros (Name contains an @).
