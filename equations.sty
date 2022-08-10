@@ -29,39 +29,6 @@
 
 %%%%%%%%%%%%%%%%%%%% USER MACROS %%%%%%%%%%%%%%%%%%%%
 
-\newcommand\newmathsymbol[2]{%
-    \NewDocumentCommand{#1}{s}{% optional star (##1), no further parameters
-      \IfBooleanTF{##1}% is starred variant?
-        {\ensuremath{#2}}%
-        {\@ThrowUnlessMath{#2}{#1}}%
-    }%
-}%
-
-\newcommand\renewmathsymbol[2]{
-    \RenewDocumentCommand{#1}{s}{% optional star (##1), no further parameters
-      \IfBooleanTF{##1}% is starred variant?
-        {\ensuremath{#2}}%
-        {\@ThrowUnlessMath{#2}{#1}}%
-    }%
-}%
-
-\newcommand\providemathsymbol[2]{
-    \ProvideDocumentCommand{#1}{s}{% optional star (##1), no further parameters
-      \IfBooleanTF{##1}% is starred variant?
-        {\ensuremath{#2}}%
-        {\@ThrowUnlessMath{#2}{#1}}%
-    }%
-}%
-
-\newcommand\declaremathsymbol[2]{
-    \DeclareDocumentCommand{#1}{s}{% optional star (##1), no further parameters
-      \IfBooleanTF{##1}% is starred variant?
-        {\ensuremath{#2}}%
-        {\@ThrowUnlessMath{#2}{#1}}%
-    }%
-}%
-
-
 \newenvironment{equations}[1][\@defaultColumnsSetup]
 {
     \begin{IEEEeqnarray*}{#1l} % add a left-aligned description column
