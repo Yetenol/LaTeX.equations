@@ -3,7 +3,6 @@
 [⌂](README.md) ›
 
 Table of Contents
-- [Custom math symbols / snippets](#custom-math-symbols--snippets)
 - [equations environment](#equations-environment)
   - [Modify comment width](#modify-comment-width)
 - [Environment specific user macros](#environment-specific-user-macros)
@@ -12,48 +11,6 @@ Table of Contents
   - [Specify the unit of an equation](#specify-the-unit-of-an-equation)
   - [Quod erum demonstrandum](#quod-erum-demonstrandum)
   - [Name and cross-reference an equation](#name-and-cross-reference-an-equation)
-
-# Custom math symbols / snippets
-Create a custom snippet to use math expressions repeatedly.
-```latex
-\newmathsymbol{\⟨macro name⟩}{⟨math expression⟩}
-```
-- **⟨macro name⟩**: name of the mathematical symbol or variable
-- **⟨math expression⟩**: mathematical term that is printed
-- throws ERROR if ⟨macro name⟩ has already been defined
-
-Examples
-- Definition in the preample
-    ```latex
-    \newmathsymbol{\Rmax}{R_\mathrm{max}}
-    \newmathsymbol{\bfg}{\left|\underline{H}\right|_\mathrm{dB}} % Betragsfrequenzgang
-    ```
-- Usage in the document
-    ```latex
-    The resistor \Rmax* has the characteristic value $\Rmax = \qty{10}{\kilo\ohm}$.
-    Let us consider the amount \bfg*.
-    ```
-
-Variations
-- **newmathsymbol**  
-    Create a new symbol. **Recommended**
-    ```latex
-    \newmathsymbol{\⟨macro name⟩}{⟨math expression⟩}
-    ```
-- **renewmathsymbol**  
-    Explicitly replace an existing symbol.
-    ```latex
-    \renewmathsymbol{\⟨macro name⟩}{⟨math expression⟩}
-    ```
-- **providemathsymbol**  
-    Only creates the symbol if it has not been defined yet. Never overrides.
-    ```latex
-    \providemathsymbol{\⟨macro name⟩}{⟨math expression⟩}
-    ```
-- **declaremathsymbol**  
-    Will always create and override the symbol, irrespective of any previous definitions.  
-    This should be used sparingly!  
-    `\declaremathsymbol{\⟨macro name⟩}{⟨math expression⟩}`  
 
 # equations environment
 Create a calculation with standardized alignment, comments, units, equation numbers and descriptions.

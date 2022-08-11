@@ -3,17 +3,14 @@
 [⌂](README.md) ›
 
 - [Dependencies](#dependencies)
+- [Naming convention](#naming-convention)
 - [User macros](#user-macros)
-  - [newmathsymbol](#newmathsymbol)
-  - [renewmathsymbol](#renewmathsymbol)
-  - [providemathsymbol](#providemathsymbol)
-  - [declaremathsymbol](#declaremathsymbol)
   - [equations environment](#equations-environment)
   - [setcommentwidth](#setcommentwidth)
 - [Environment specific user macros](#environment-specific-user-macros)
   - [intertext](#intertext)
   - [comment](#comment)
-  - [commentunit](#commentunit)
+  - [equnit](#equnit)
   - [qed](#qed)
   - [label](#label)
   - [sublabel](#sublabel)
@@ -37,35 +34,17 @@
 | etoolbox      | modify existing environments from other packages |
 | xifthen       | detect empty arguments                           |
 
+# Naming convention
+
+- **User macros**  
+    `\⟨all lower case⟩`
+- **Internal macros**  
+    `\⟨Upper Camel Case⟩@⟨namespace⟩`
+- **Internal variables**  
+    `\⟨lower Camel Case⟩@⟨namespace⟩`
+
 # User macros
 Public functions are accessible everywhere within the project.
-
-## newmathsymbol
-```latex
-\newmathsymbol{\⟨macro name⟩}{⟨math expression⟩}
-```
-- Create a custom snippet to use math expressions repeatedly
-- **@param** #1 ⟨macro name⟩: name of the mathematical symbol or variable
-- **@param** #2 ⟨math expression⟩: mathematical term that is printed
-- **@throws** ERROR if ⟨macro name⟩ has already been defined
-
-## renewmathsymbol
-```latex
-\renewmathsymbol{\⟨macro name⟩}{⟨math expression⟩}
-```
-- Analog to `\newmathsymbol`, but explicitly replaces an existing symbol.
-- **@throws** ERROR if ⟨macro name⟩ has not previously been defined
-
-## providemathsymbol
-```latex
-\providemathsymbol{\⟨macro name⟩}{⟨math expression⟩}
-```
-- Analog to `\newmathsymbol`, but only creates the symbol if it has not been defined yet. Never overrides.
-
-## declaremathsymbol
-`\declaremathsymbol{\⟨macro name⟩}{⟨math expression⟩}`
-- Analog to `\newmathsymbol`, but will always create the new definition, irrespective of any existing ⟨macro name⟩ with the same name
-- this should be used sparingly
 
 ## equations environment
 ```latex

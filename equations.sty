@@ -1,16 +1,16 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{sty/equations}[Beatify multiple equations with comments and alignment.]
 
-\RequirePackage{amsmath}        % provide basic math components
-\RequirePackage{amssymb}        % provide QED square symbol
-\RequirePackage{IEEEtrantools}  % provide {IEEEeqnarray} to align equations and their comments
-\RequirePackage{array}          % provide {array} to draw a vertical line next to the comments
-\RequirePackage{siunitx}        % provide \unit to display commentunits
-\RequirePackage{etoolbox}       % add methods to an environment
-\RequirePackage{xifthen}        % detect empty arguments
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage{IEEEtrantools}
+\RequirePackage{array}
+\RequirePackage{siunitx}
+\RequirePackage{etoolbox}
+\RequirePackage{xifthen}
 
 
-\makeatletter % Grant access to internal macros (Name contains an @).
+\makeatletter % Grant access to internal macros
 
 %%%%%%%%%%%%%%%%%%%% PACKAGE: DEFINE GLOBAL VARIABLES %%%%%%%%%%%%%%%%%%%%
 
@@ -158,4 +158,4 @@
     \PackageWarning{equations}{Use ⧵equnit instead of ⧵commentunit. The macro is deprecated}
 }
 
-\makeatother % Revoke access to internal macros (Name contains an @).
+\makeatother % Revoke access to internal macros
