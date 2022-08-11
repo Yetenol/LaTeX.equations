@@ -39,9 +39,9 @@
 - **User macros**  
     `\⟨all lower case⟩`
 - **Internal macros**  
-    `\⟨Upper Camel Case⟩@⟨namespace⟩`
+    `\@⟨Upper Camel Case⟩`
 - **Internal variables**  
-    `\⟨lower Camel Case⟩@⟨namespace⟩`
+    `\@⟨lower Camel Case⟩`
 
 # User macros
 Public functions are accessible everywhere within the project.
