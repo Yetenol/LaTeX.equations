@@ -8,7 +8,7 @@
     Examples | `\newmathsymbol{\⟨macro name⟩}{⟨math expression⟩}`
 - **[Code documentation ›](documentation.md)**  
     Dependencies | `\@RenderDescription`
-- **[Source code](equations.sty)**
+- **[Source code ›](equations.sty)**
 - [Installation](#installation)
 - [Usage](#usage)
 - [Package information](#package-information)
