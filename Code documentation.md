@@ -12,7 +12,7 @@
 # Naming convention
 | Macro type         | Naming convention                 | Example              |
 | ------------------ | --------------------------------- | -------------------- |
-| User marco         | `\⟨all lower case⟩`               | `\comment`         |
+| User marco         | `\⟨all lower case⟩`               | `\setcommentwidth`         |
 | Internal macro     | `\@⟨Upper Camel Case⟩` | `\@ClearDescription` |
 | Internal variables | `\@⟨lower Camel Case⟩` | `\@commentWidth`                     |
 
