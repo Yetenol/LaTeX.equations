@@ -1,18 +1,5 @@
-<h1> User manual </h1>
+# Equations environment
 
-[⌂](README.md) ›
-
-Table of Contents
-- [equations environment](#equations-environment)
-  - [Modify comment width](#modify-comment-width)
-- [Environment specific user macros](#environment-specific-user-macros)
-  - [Insert text between equation lines](#insert-text-between-equation-lines)
-  - [Annotate an equation](#annotate-an-equation)
-  - [Specify the unit of an equation](#specify-the-unit-of-an-equation)
-  - [Quod erum demonstrandum](#quod-erum-demonstrandum)
-  - [Name and cross-reference an equation](#name-and-cross-reference-an-equation)
-
-# equations environment
 Create a calculation with standardized alignment, comments, units, equation numbers and descriptions.
 ```latex
 \begin{equations}
@@ -22,15 +9,16 @@ Create a calculation with standardized alignment, comments, units, equation numb
 - **star variant**: enable citation numbers by default
 - **⟨column setup⟩**: columns and their types used to display all equations
 
-Variations 
-- **Custom alignment** setup  
-    List LaTeX `columntypes` to align multiple equation lines
-    ```latex
-    \begin{equations}[⟨column setup⟩]
-    ```
-    Example: `\begin{equations}[rCll]`
+## Customize alignment
+
+List LaTeX `columntypes` to align multiple equation lines
+```latex
+\begin{equations}[⟨column setup⟩]
+```
+- Example: `\begin{equations}[rCll]`
 
 ## Modify comment width
+
 By default, comments take up one third of the writable page width.  
 This width can be modified inside the environment for the current environment or outside for multiple.
 ```latex
@@ -39,9 +27,11 @@ This width can be modified inside the environment for the current environment or
 - **⟨comment width⟩**: width of the column that displays the equation comments or units
 
 # Environment specific user macros
+
 The following macros are only available inside the `equations` environment.
 
 ## Insert text between equation lines
+
 Divide the equation block in two and write a conventional text paragraph between them.
 ```latex
 \intertext{⟨paragraph⟩}
@@ -49,9 +39,7 @@ Divide the equation block in two and write a conventional text paragraph between
 - **⟨paragraph⟩**: Regular text to display (no math mode)
 - call it after the `\\` of the last equation without any further commands
 - don't put a `\\` in front of the next equation
-
-Example:
-
+- Example:
 ```latex
 \begin{equations}
     U_1 &=& R_1 \cdot I_1 \\
@@ -61,6 +49,7 @@ Example:
 ```
 
 ## Annotate an equation
+
 Annotate the current equation line with wrapping text.
 ```latex
 \comment{⟨annotation text⟩}
@@ -70,6 +59,7 @@ Annotate the current equation line with wrapping text.
 - if the allowed width gets exceeded, the text wraps
 
 ## Specify the unit of an equation
+
 Note the unit for the terms of the current equation.
 ```latex
 \equnit{⟨unit expression⟩}
@@ -78,7 +68,8 @@ Note the unit for the terms of the current equation.
 - the unit is surrounded by brackets and gets rendered at the right side of the page
 - some horizontal space separates it from the equation
 
-## Quod erum demonstrandum
+## Quod erat demonstrandum
+
 Finish a mathematical proof.
 ```latex
 \qed
@@ -87,6 +78,7 @@ Finish a mathematical proof.
 - call it after a linebreak `\\` at the end of the environment
 
 ## Name and cross-reference an equation
+
 Give the current equation a name to be able to reference it. An equation number is displayed automatically.
 ```latex
 \label{⟨name⟩}
@@ -98,17 +90,17 @@ Give the current equation a name to be able to reference it. An equation number 
 - automatically create a citation number for the current line
 - **⟨name⟩**: new node for cross-referencing e.g. `\label{eq:EXAMPLE}`
 - `\label` renders as `(3)` and `\sublabel` renders as `(3a)`
+- Examples:
 
-Example
+Equation
+```latex
+\begin{equations}
+    \Phi &=& MI
+    \label{eq:magneticFlux}
+\end{equations}
+```
 
-- Equation
-    ```latex
-    \begin{equations}
-        \Phi &=& MI
-        \label{eq:magneticFlux}
-    \end{equations}
-    ```
-- Reference
-    ```latex
-    We have demonstrated this with equation \eqref{eq:magneticFlux}.
-    ```
+Reference
+```latex
+We have demonstrated this with equation \eqref{eq:magneticFlux}.
+```
